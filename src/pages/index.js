@@ -1,0 +1,12 @@
+export { default as Home } from './Home/Home';
+export { default as CargoStatistics } from './CargoStatistics/CargoStatistics';
+export { default as Publications } from './Publications/Publications';
+export { default as Stakeholders } from './Stakeholders/Stakeholders';
+export { default as TankerFreight } from './TankerFreight/TankerFreight';
+export { default as Tools } from './Toolss/Tools';
+export { default as Login } from './Login/Login';
+export { default as Signup } from './SignUp/Signup';
+export { default as ForgotPassword } from './ForgotPassword/ForgotPassword';
+export { default as ResetPassword } from './ResetPassword/ResetPassword';
+export { default as NotFound } from './NotFound';
+export { default as WhoAreYou } from './WhoAreYou';
