@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { ScrollToTop } from './hooks';
 import { Home, Stakeholders, TankerFreight, Tools, CargoStatistics, Publications, Login, Signup, ResetPassword, NotFound, WhoAreYou, EmailVerification, Bank, FreightRateForm, FreightRateRequest, Profile, Settings } from './pages';
-import { Navbar, Footer, SignUpLayout } from './components';
+import { Navbar, Footer, SignUpLayout, ProtectedRoute } from './components';
 
 import './App.scss';
 import ShipperDashboard from './pages/ShipperDashboard/ShipperDashboard';
@@ -41,14 +41,14 @@ const App = () => {
           </Route>
 
           {/* Shipper Dashboard Routes */}
-          <Route path="/shipper-dashboard" element={<ShipperDashboard />} >
-            <Route index element={<MainDashboard />} />
-            <Route path="main-dashboard" element={<MainDashboard />} />
-            <Route path="bank" element={<Bank />} />
-            <Route path="freight-rate-form" element={<FreightRateForm />} />
-            <Route path="freight-rate-request" element={<FreightRateRequest />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="settings" element={<Settings />} />
+          <Route path="/shipper-dashboard" element={<ProtectedRoute><ShipperDashboard /></ProtectedRoute>} >
+            <Route index element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
+            <Route path="main-dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
+            <Route path="bank" element={<ProtectedRoute><Bank /></ProtectedRoute>} />
+            <Route path="freight-rate-form" element={<ProtectedRoute><FreightRateForm /></ProtectedRoute>} />
+            <Route path="freight-rate-request" element={<ProtectedRoute><FreightRateRequest /></ProtectedRoute>} />
+            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           </Route>
 
           {/* Route without Navbar and Footer */}

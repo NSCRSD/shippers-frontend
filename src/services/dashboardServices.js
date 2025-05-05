@@ -1,11 +1,15 @@
 import Api from "../api";
 
-export const resetPassword = async (body) => {
+export const dashboard = async (body) => {
+  const token = localStorage.getItem('token')
   try {
     const response = await Api({
-      method: "post",
-      url: `/rest-password`,
+      method: "get",
+      url: "/admin/dashboard",
       data: body,
+      headers: {
+         Authorization: `Bearer ${token}` ,
+      }
     });
     return { data: response?.data, status: response?.status };
   } catch (error) {

@@ -92,9 +92,10 @@ const Login = () => {
     try {
       const response = await login({ email, password });
 
-      if (response?.ok || response?.status === "success") {
+      if (response?.status === 201 || response?.status === "success") {
         showToast("Login successful!", "success");
         // Redirect to dashboard or another page
+        localStorage.setItem('token', response.access_token);
         setTimeout(() => navigate("/shipper-dashboard"), 3000);
       } else {
         showToast(response?.message || "Invalid email or password.", "error");
