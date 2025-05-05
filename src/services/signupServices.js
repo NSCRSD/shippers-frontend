@@ -7,7 +7,7 @@ export const signup = async (body) => {
       url: `/auth/signup`,
       data: body,
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "Application/json",
       }
     });
     return { data: response?.data, status: response?.status };
