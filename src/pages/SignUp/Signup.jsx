@@ -144,11 +144,11 @@ const Signup = () => {
 
         setTimeout(() => navigate("/whoareyou/email-verification"), 3000);
       } else {
-        showToast(response.data.message || "Signup failed. Please try again.", "error");
+        showToast(response.message || "Signup failed. Please try again.", "error");
       }
     } catch (error) {
       console.error(error);
-      showToast("Server error. Try again later.", "error");
+      showToast(response.message || "Server error. Try again later.", "error");
     }
   };
 
