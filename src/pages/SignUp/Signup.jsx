@@ -144,7 +144,7 @@ const Signup = () => {
 
         setTimeout(() => navigate("/whoareyou/email-verification"), 3000);
       } else {
-        showToast(response.message || "Signup failed. Please try again.", "error");
+        showToast( "Signup failed. Please try again.", "error");
       }
     } catch (error) {
       console.error(error);
