@@ -1,7 +1,7 @@
 // src/pages/Login.jsx
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from 'lucide-react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { login } from "../../services/loginServices";
 import { images } from "../../constants";
@@ -12,6 +12,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "", visible: false });
+  const navigate = useNavigate(); // Initialize the navigate function
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
