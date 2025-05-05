@@ -34,12 +34,12 @@ const WhoAreYou = () => {
           onChange={(e) => setUserType(e.target.value)} // Update userType state
         >
           <option value="" disabled>Select from Drop Down</option>
-          <option value="Banker">Banker</option>
-          <option value="NSC Staff">NSC Staff</option>
-          <option value="Shipper">Shipper</option>
-          <option value="Terminal Operator">Terminal Operators</option>
-          <option value="Regulators">Regulators</option>
-          <option value="Shipping Lines">Shipping Lines</option>
+          <option value="banker">Banker</option>
+          <option value="nsc staff">NSC Staff</option>
+          <option value="shipper">Shipper</option>
+          <option value="terminal operator">Terminal Operators</option>
+          <option value="regulators">Regulators</option>
+          <option value="shipping lines">Shipping Lines</option>
         </select>
         {/* Dropdown arrow icon */}
         <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700 pointer-events-none" />

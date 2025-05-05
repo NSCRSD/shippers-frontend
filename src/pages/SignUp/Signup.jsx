@@ -45,11 +45,11 @@ const Signup = () => {
   }[strength];
 
   const validateInputs = () => {
-    if (!form.firstName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff"].includes(userType)) {
+    if (!form.firstName && ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff"].includes(userType)) {
       showToast("Please enter your first name.", "error");
       return false;
     }
-    if (!form.lastName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff"].includes(userType)) {
+    if (!form.lastName && ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff"].includes(userType)) {
       showToast("Please enter your last name.", "error");
       return false;
     }
@@ -71,14 +71,14 @@ const Signup = () => {
 
     // Password validation for specific user types
     if (
-      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff", "Banker"].includes(userType) &&
+      ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff", "banker"].includes(userType) &&
       !password
     ) {
       showToast("Please enter your password.", "error");
       return false;
     }
     if (
-      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff", "Banker"].includes(userType) &&
+      ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff", "banker"].includes(userType) &&
       password.length < 6
     ) {
       showToast("Password must be at least 6 characters long.", "error");
@@ -86,19 +86,19 @@ const Signup = () => {
     }
 
     // Bank-specific validation
-    if (!form.bankName && userType === "Banker") {
+    if (!form.bankName && userType === "banker") {
       showToast("Please enter your bank name.", "error");
       return false;
     }
 
     // Department validation for NSC Staff
-    if (!form.department && userType === "NSC Staff") {
+    if (!form.department && userType === "nsc staff") {
       showToast("Please select your department.", "error");
       return false;
     }
 
     // Address validation for specific user types
-    if (!form.address && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType)) {
+    if (!form.address && ["shipper", "terminal operator", "regulators", "shipping lines"].includes(userType)) {
       showToast("Please enter your address.", "error");
       return false;
     }
@@ -147,7 +147,7 @@ const Signup = () => {
         showToast(response.message || "Signup failed. Please try again.", "error");
       }
     } catch (error) {
-      console.error(error.response?.data);
+      console.error(error);
       showToast("Server error. Try again later.", "error");
     }
   };
@@ -161,7 +161,7 @@ const Signup = () => {
 
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4">
         {/* Render form fields based on userType */}
-        {userType === "Banker" && (
+        {userType === "banker" && (
           <>
             <input
               type="text"
@@ -209,7 +209,7 @@ const Signup = () => {
           </>
         )}
 
-        {["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff"].includes(userType) && (
+        {["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff"].includes(userType) && (
           <>
             <div className="grid grid-cols-2 gap-4">
               <input
@@ -245,7 +245,7 @@ const Signup = () => {
               onChange={handleChange}
               className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
             />
-            {userType === "NSC Staff" && (
+            {userType === "nsc staff" && (
               <select
                 name="department"
                 value={form.department}
@@ -255,12 +255,12 @@ const Signup = () => {
                 <option value="" disabled>
                   Select Your Department
                 </option>
-                <option value="Regulatory Services Department">Regulatory Services Department</option>
-                <option value="ICT">ICT</option>
-                <option value="Human Resources">Human Resources</option>
-                <option value="Finance">Finance</option>
-                <option value="Legal">Legal</option>
-                <option value="Consumer Affairs">Consumer Affairs</option>
+                <option value="regulatory services department">Regulatory Services Department</option>
+                <option value="ict">ICT</option>
+                <option value="human resources">Human Resources</option>
+                <option value="finance">Finance</option>
+                <option value="legal">Legal</option>
+                <option value="consumer affairs">Consumer Affairs</option>
               </select>
             )}
             <input
