@@ -147,8 +147,8 @@ const Signup = () => {
         showToast(response.message || "Signup failed. Please try again.", "error");
       }
     } catch (error) {
-      console.error(error);
-      showToast(response.message || "Server error. Try again later.", "error");
+      console.error(error.response?.data);
+      showToast("Server error. Try again later.", "error");
     }
   };
 
