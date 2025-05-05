@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff } from 'lucide-react';
 
 import { signup } from "../../services/signupServices";
-import { sendEmailVerification } from "../../services/sendEmailVerificationServices"; 
-
+import { sendEmailVerification } from "../../services/sendEmailVerificationServices";
 
 const Signup = () => {
   const location = useLocation();
@@ -18,7 +17,8 @@ const Signup = () => {
     phoneNumber: "",
     password: "",
     bankName: "",
-    address: "", 
+    address: "",
+    department: "", // Added department for NSC Staff
   });
 
   const [password, setPassword] = useState('');
@@ -45,11 +45,11 @@ const Signup = () => {
   }[strength];
 
   const validateInputs = () => {
-    if (!form.firstName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType)) {
+    if (!form.firstName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff"].includes(userType)) {
       showToast("Please enter your first name.", "error");
       return false;
     }
-    if (!form.lastName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType)) {
+    if (!form.lastName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff"].includes(userType)) {
       showToast("Please enter your last name.", "error");
       return false;
     }
@@ -69,16 +69,16 @@ const Signup = () => {
       return false;
     }
 
-    // Password validation only for specific user types
+    // Password validation for specific user types
     if (
-      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType) &&
+      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff", "Banker"].includes(userType) &&
       !password
     ) {
       showToast("Please enter your password.", "error");
       return false;
     }
     if (
-      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType) &&
+      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff", "Banker"].includes(userType) &&
       password.length < 6
     ) {
       showToast("Password must be at least 6 characters long.", "error");
@@ -90,8 +90,10 @@ const Signup = () => {
       showToast("Please enter your bank name.", "error");
       return false;
     }
-    if (!form.email && userType === "Banker") {
-      showToast("Please enter your official email.", "error");
+
+    // Department validation for NSC Staff
+    if (!form.department && userType === "NSC Staff") {
+      showToast("Please select your department.", "error");
       return false;
     }
 
@@ -117,7 +119,7 @@ const Signup = () => {
 
     try {
       const payload = {
-        userType,
+        user_type: userType,
         email: form.email,
         first_name: form.firstName,
         last_name: form.lastName,
@@ -125,6 +127,7 @@ const Signup = () => {
         password: password,
         address: form.address,
         bank_name: form.bankName,
+        department: form.department,
       };
 
       const response = await signup(payload);
@@ -184,10 +187,29 @@ const Signup = () => {
               onChange={handleChange}
               className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
             />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                name="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  handleChange(e);
+                }}
+                className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none pr-10"
+              />
+              <div
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </div>
+            </div>
           </>
         )}
 
-        {["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType) && (
+        {["Shipper", "Terminal Operator", "Regulators", "Shipping Lines", "NSC Staff"].includes(userType) && (
           <>
             <div className="grid grid-cols-2 gap-4">
               <input
@@ -223,6 +245,24 @@ const Signup = () => {
               onChange={handleChange}
               className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
             />
+            {userType === "NSC Staff" && (
+              <select
+                name="department"
+                value={form.department}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+              >
+                <option value="" disabled>
+                  Select Your Department
+                </option>
+                <option value="Regulatory Services Department">Regulatory Services Department</option>
+                <option value="ICT">ICT</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Finance">Finance</option>
+                <option value="Legal">Legal</option>
+                <option value="Consumer Affairs">Consumer Affairs</option>
+              </select>
+            )}
             <input
               type="text"
               placeholder="Address"
