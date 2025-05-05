@@ -133,15 +133,8 @@ const Signup = () => {
       const response = await signup(payload);
 
       if (response.status === 201) {
-        // Call the email verification endpoint after successful signup
-        const verifyResponse = await sendEmailVerification({ email: form.email });
 
-        if (verifyResponse.status === 201) {
-          showToast("Signup successful! Verification email sent.", "success");
-        } else {
-          showToast("Signup successful, but failed to send verification email.", "error");
-        }
-
+        showToast("Signup successful! Verification email sent.", "success");
         setTimeout(() => navigate("/whoareyou/email-verification"), 3000);
       } else {
         showToast(response.message || "Signup failed. Please try again.", "error");
