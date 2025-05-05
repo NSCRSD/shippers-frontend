@@ -10,7 +10,6 @@ export { default as ForgotPassword } from './ForgotPassword/ForgotPassword';
 export { default as ResetPassword } from './ResetPassword/ResetPassword';
 export { default as NotFound } from './NotFound';
 export { default as WhoAreYou } from './WhoAreYou';
-export { default as Department } from './Department';
 export { default as EmailVerification } from './EmailVerification';
 export { default as ShipperDashoard } from './ShipperDashboard/ShipperDashboard';
 export { default as MainDashoard } from './ShipperDashboard/MainDashboard';

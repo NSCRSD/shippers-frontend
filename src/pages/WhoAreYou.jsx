@@ -18,12 +18,6 @@ const WhoAreYou = () => {
       return;
     }
 
-    // // Navigate to Department page if userType is NSC Staff
-    // if (userType === "NSC Staff") {
-    //   navigate("/whoareyou/department", { state: { userType } });
-    //   return;
-    // }
-
     // Navigate to Signup page for other user types
     navigate("/whoareyou/signup", { state: { userType } });
   };

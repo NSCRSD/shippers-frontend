@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { ScrollToTop } from './hooks';
-import { Home, Stakeholders, TankerFreight, Tools, CargoStatistics, Publications, Login, Signup, ResetPassword, NotFound, WhoAreYou, Department, EmailVerification, Bank, FreightRateForm, FreightRateRequest, Profile, Settings } from './pages';
+import { Home, Stakeholders, TankerFreight, Tools, CargoStatistics, Publications, Login, Signup, ResetPassword, NotFound, WhoAreYou, EmailVerification, Bank, FreightRateForm, FreightRateRequest, Profile, Settings } from './pages';
 import { Navbar, Footer, SignUpLayout } from './components';
 
 import './App.scss';
@@ -37,7 +37,6 @@ const App = () => {
           <Route path="/whoareyou" element={<SignUpLayout />}>
             <Route index element={<WhoAreYou />} />
             <Route path="signup" element={<Signup />} />
-            <Route path="department" element={<Department />} />
             <Route path="email-verification" element={<EmailVerification />} />
           </Route>
 
