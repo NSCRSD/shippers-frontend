@@ -2,11 +2,10 @@ import React from 'react';
 
 
 const steps = [
-  { title: "STEP 1", description: "Lorem ipsum dolor sit amet, consectetur." },
-  { title: "STEP 2", description: "Lorem ipsum dolor sit amet, consectetur." },
-  { title: "STEP 3", description: "Lorem ipsum dolor sit amet, consectetur." },
-  { title: "STEP 4", description: "Lorem ipsum dolor sit amet, consectetur." },
-  { title: "FINAL STEP", description: "Lorem ipsum dolor sit amet, consectetur." },
+  { title: "STEP 1", description: "Select Your User Type." },
+  { title: "STEP 2", description: "Fill The Form To Sign Up." },
+  { title: "STEP 3", description: "Verify Email." },
+  { title: "FINAL STEP", description: "Log In." },
 ];
 
 export default function StepItem({ currentStep }) {

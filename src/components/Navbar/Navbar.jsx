@@ -16,6 +16,51 @@ const menuLink = "text-black hover:text-[#58A986] ease-in duration-300 font-bold
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
+  const [openMenus, setOpenMenus] = useState({});
+  const timeoutRefs = {};
+
+  const handleMouseEnter = (level, key) => {
+    clearTimeout(timeoutRefs[level]);
+    setOpenMenus((prev) => ({ ...prev, [level]: key }));
+  };
+
+  const handleMouseLeave = (level) => {
+    timeoutRefs[level] = setTimeout(() => {
+      setOpenMenus((prev) => ({ ...prev, [level]: null }));
+    }, 300); // Delay before hiding to allow smoother experience
+  };
+
+  const renderDropdown = (items, level = 1) => {
+    return (
+      <ul
+  className={`absolute left-full top-0 mt-0 ml-1 w-56 bg-white shadow-lg z-[${
+    level + 10
+  }] transition-all duration-200`}
+>
+  {items.map((item) => (
+    <li
+      key={item.name}
+      className="relative"
+      onMouseEnter={() => handleMouseEnter(level, item.name)}
+      onMouseLeave={() => handleMouseLeave(level)}
+    >
+      <Link
+        to={`/${item.link}`}
+        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 hover:border-l-4 hover:border-[#185F95] font-medium relative transition-all duration-200 transform hover:scale-105"
+      >
+        {item.name}
+      </Link>
+      {item.dropdown && openMenus[level] === item.name && (
+        <div className="absolute top-0 left-full">
+          {renderDropdown(item.dropdown, level + 1)}
+        </div>
+      )}
+    </li>
+  ))}
+</ul>
+
+    );
+  };
 
   return (
     <div className="fixed app__flex flex-col lg:flex-row bg-white min-h-20 w-full z-[999] lg:px-3">
@@ -27,18 +72,29 @@ const Navbar = () => {
             </div>
           </Link>
         </div>
-      
-        <div className="basis-7/12 hidden lg:flex space-x-6 text-lg">
+
+        <ul className="basis-7/12 hidden lg:flex space-x-6 text-lg relative">
           {links.map((item) => (
-            <NavLink
-              to={`/${item.link}`}
-              className={({ isActive }) => (isActive ? activeLink : normalLink)}
-              key={`link-${item.name}`}
+            <li
+              key={item.name}
+              className="relative group navlink"
+              onMouseEnter={() => handleMouseEnter(0, item.name)}
+              onMouseLeave={() => handleMouseLeave(0)}
             >
-              {item.name}
-            </NavLink>
+              <Link
+                to={`/${item.link}`}
+                className={({ isActive }) => (isActive ? activeLink : normalLink)}
+              >
+                {item.name}
+              </Link>
+              {item.dropdown && openMenus[0] === item.name && (
+                <div className="absolute top-full left-0 mt-1">
+                  {renderDropdown(item.dropdown, 1)}
+                </div>
+              )}
+            </li>
           ))}
-        </div>
+        </ul>
 
         <div className="app__navbar-menu lg:hidden">
           <HiMenuAlt4 onClick={() => setToggle(true)} />

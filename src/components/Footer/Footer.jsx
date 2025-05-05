@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row md:justify-between gap-10 mb-10">
         {/* Logo */}
         <div className="flex justify-center md:justify-start">
-            <div className="w-20 h-20">
+            <div className="w-60 h-20">
               <img src={images.shippersLogo} alt="logo" className="w-full h-full" />
             </div>
         </div>

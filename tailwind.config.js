@@ -6,6 +6,9 @@ module.exports = {
       width: {
         half: 'calc(50% - 60px)', // Use the calc function directly as a string
       },
+      colors: {
+        primary: '#58A986',
+      },
     },
   },
   plugins: [],

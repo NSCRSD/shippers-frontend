@@ -4,8 +4,11 @@ export const signup = async (body) => {
   try {
     const response = await Api({
       method: "post",
-      url: `/signup`,
+      url: `/auth/signup`,
       data: body,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
     });
     return { data: response?.data, status: response?.status };
   } catch (error) {

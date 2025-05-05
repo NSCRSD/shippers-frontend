@@ -1,21 +1,26 @@
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, Link } from 'react-router-dom';
 
 import  StepItem  from './StepItem/StepItem';
 import { images } from '../constants';
 
 const SignUpLayout = () => {
   const location = useLocation();
+  const isEmailVerification = location.pathname === '/whoareyou/email-verification';
 
   // Find current step based on path
   const getCurrentStep = () => {
     switch (location.pathname) {
       case '/whoareyou':
         return 1;
+      case '/whoareyou/department':
+        return 1;
       case '/whoareyou/signup':
         return 2;
-      case '/whoareyou/forgot-password':
+      case '/whoareyou/email-verification':
         return 3;
+      case '/login':
+        return 4;
       default:
         return 0;
     }
@@ -29,11 +34,18 @@ const SignUpLayout = () => {
     <div className="flex flex-col w-3/4 relative">
     {/* Header */}
     <div className="flex justify-between items-center px-10 py-6">
-        <img src={images.logo} alt="Logo" className="w-60 mb-2" /> 
-        <div className="flex items-center space-x-2">
-        <p className="text-gray-600 text-sm">Already a Member?</p>
-        <button className="border border-gray-500 text-gray-700 text-sm px-4 py-1 rounded">Log In</button>
-        </div>
+        <Link to="/home"><img src={images.logo} alt="Logo" className="w-60 mb-2" /></Link>    
+        {!isEmailVerification && (
+          <div className="flex items-center space-x-2">
+            <p className="text-gray-600 text-sm">Already a Member?</p>
+            <Link
+              to="/login"
+              className="border border-gray-500 text-gray-700 text-sm px-4 py-1 rounded transition duration-300 hover:bg-gray-500 hover:text-white"
+            >
+              Log In
+            </Link>
+          </div>
+        )}
     </div>
 
     {/* Main Content */}
@@ -52,7 +64,7 @@ const SignUpLayout = () => {
     {/* Right Section */}
     <div className="w-1/4 text-white flex flex-col justify-center items-center" 
         style={{
-            background: `linear-gradient(135deg, #3366cc 40%, #003366 60%)`
+            backgroundImage: `url(${images.signupbg})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'
         }}
     >
     <div className="flex flex-col space-y-10">

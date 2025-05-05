@@ -1,6 +1,7 @@
 // src/pages/Login.jsx
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 import { login } from "../../services/loginServices";
 import { images } from "../../constants";
@@ -12,10 +13,42 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "", visible: false });
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      image: images.laptop, 
+      quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      author: 'Shipping Quote Author',
+    },
+    {
+      image: images.laptop,
+      quote: 'Second slide quote goes here.',
+      author: 'Second Author',
+    },
+    {
+      image: images.laptop,
+      quote: 'Third slide quote here.',
+      author: 'Third Author',
+    },
+  ];
+
+  
   const showToast = (message, type) => {
     setToast({ message, type, visible: true });
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000); // Corrected
   };
+  
+
+  // Auto-slide effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000); // 4 seconds
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberedEmail");
@@ -61,6 +94,7 @@ const Login = () => {
       if (response?.ok || response?.status === "success") {
         showToast("Login successful!", "success");
         // Redirect to dashboard or another page
+        setTimeout(() => navigate("/shipper-dashboard"), 3000);
       } else {
         showToast(response?.message || "Invalid email or password.", "error");
       }
@@ -76,10 +110,10 @@ const Login = () => {
     <div className="flex flex-col w-3/4 relative">
     {/* Header */}
     <div className="flex justify-between items-center px-10 py-6">
-        <img src={images.logo} alt="Logo" className="w-60 mb-2" /> 
+        <Link to="/home"><img src={images.logo} alt="Logo" className="w-60 mb-2" /></Link> 
         <div className="flex items-center space-x-2">
         <p className="text-gray-600 text-sm">No Account yet?</p>
-        <button className="border border-gray-500 text-gray-700 text-sm px-4 py-1 rounded">Sign Up</button>
+        <Link to="/whoareyou" className="border border-gray-500 text-gray-700 text-sm px-4 py-1 rounded transition duration-300 hover:bg-gray-500 hover:text-white">Sign Up</Link>
         </div>
     </div>
 
@@ -156,18 +190,45 @@ const Login = () => {
     {/* Right Section */}
     <div className="w-1/4 text-white flex flex-col justify-center items-center" 
         style={{
-            background: `linear-gradient(135deg, #3366cc 40%, #003366 60%)`
+            backgroundImage: `url(${images.loginbg})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'
         }}
     >
-    <div className="flex space-y-10">
-        
-    </div>
+        {/* Slide Image */}
+      <div className=" flex justify-center items-center pt-20">
+        <img
+          src={slides[currentSlide].image}
+          alt="Slide"
+          className="max-h-[380px] object-contain drop-shadow-2xl transition-all duration-700"
+        />
+      </div>
+
+      {/* Slider Dots */}
+      <div className="flex space-x-2 my-4">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              currentSlide === index ? 'bg-white' : 'bg-gray-400'
+            }`}
+            onClick={() => setCurrentSlide(index)}
+          />
+        ))}
+      </div>
+
+      {/* Quote Section */}
+      <div className="text-center my-6 px-6 pb-8">
+        <div className="text-5xl font-extrabold">“</div>
+        <p className="italic text-sm">{slides[currentSlide].quote}</p>
+        <p className="text-sm mt-1">
+          - <span className="font-semibold italic">{slides[currentSlide].author}</span>
+        </p>
+      </div>
     </div>
 
     {/* Toast Notification */}
     {toast.visible && (
       <div
-        className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg text-white ${
+        className={`fixed top-4 left-[37%] transform -translate-x-1/2 px-4 py-2 rounded-lg text-white ${
           toast.type === "success" ? "bg-green-500" : "bg-red-500"
         }`}
       >

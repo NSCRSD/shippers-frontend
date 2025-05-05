@@ -62,3 +62,54 @@
         display: none;
     }
 }
+
+.navlink {
+    position: relative;
+    font-weight: bold;
+    font-size: 0.875rem; // text-sm
+    transition: font-size 0.3s ease;
+  
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 3px;
+      width: 0%;
+      background-color: #00598C; // blue line
+      transition: width 0.3s ease;
+    }
+  
+    &:hover {
+      font-size: 1rem; // text-base
+    }
+  
+    &:hover::after {
+      width: 100%;
+    }
+  }
+  
+  .navlink.active::after {
+    width: 100%;
+  }
+  
+  @media (max-width: 1024px) {
+    .navlink::after {
+      left: -6px;
+      top: 0;
+      bottom: auto;
+      width: 3px;
+      height: 0%;
+    }
+  
+    .navlink:hover::after {
+      height: 100%;
+      width: 3px;
+    }
+  
+    .navlink.active::after {
+      height: 100%;
+      width: 3px;
+    }
+  }
+  

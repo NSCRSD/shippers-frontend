@@ -1,17 +1,26 @@
 // src/pages/Signup.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff } from 'lucide-react';
 
 import { signup } from "../../services/signupServices";
+import { sendEmailVerification } from "../../services/sendEmailVerificationServices"; 
+
 
 const Signup = () => {
+  const location = useLocation();
+  const userType = location.state?.userType; // Access userType from state
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    phoneNumber: "",
     password: "",
+    bankName: "",
+    address: "", 
   });
+
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "", visible: false });
@@ -36,11 +45,11 @@ const Signup = () => {
   }[strength];
 
   const validateInputs = () => {
-    if (!form.firstName) {
+    if (!form.firstName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType)) {
       showToast("Please enter your first name.", "error");
       return false;
     }
-    if (!form.lastName) {
+    if (!form.lastName && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType)) {
       showToast("Please enter your last name.", "error");
       return false;
     }
@@ -53,14 +62,45 @@ const Signup = () => {
       showToast("Please enter a valid email address.", "error");
       return false;
     }
-    if (!password) {
+    const phoneRegex = /^\d{10,14}$/;
+
+    if (!form.phoneNumber || !phoneRegex.test(form.phoneNumber)) {
+      showToast("Please enter a valid phone number (10-14 digits)", "error");
+      return false;
+    }
+
+    // Password validation only for specific user types
+    if (
+      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType) &&
+      !password
+    ) {
       showToast("Please enter your password.", "error");
       return false;
     }
-    if (password.length < 6) {
+    if (
+      ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType) &&
+      password.length < 6
+    ) {
       showToast("Password must be at least 6 characters long.", "error");
       return false;
     }
+
+    // Bank-specific validation
+    if (!form.bankName && userType === "Banker") {
+      showToast("Please enter your bank name.", "error");
+      return false;
+    }
+    if (!form.email && userType === "Banker") {
+      showToast("Please enter your official email.", "error");
+      return false;
+    }
+
+    // Address validation for specific user types
+    if (!form.address && ["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType)) {
+      showToast("Please enter your address.", "error");
+      return false;
+    }
+
     return true;
   };
 
@@ -76,13 +116,32 @@ const Signup = () => {
     }
 
     try {
-      const response = await signup(form);
+      const payload = {
+        userType,
+        email: form.email,
+        first_name: form.firstName,
+        last_name: form.lastName,
+        phone_number: form.phoneNumber,
+        password: password,
+        address: form.address,
+        bank_name: form.bankName,
+      };
 
-      if (response.ok) {
-        showToast("Signup successful. Redirecting to login...", "success");
-        setTimeout(() => navigate("/login"), 3000); // Redirect to login after 3 seconds
+      const response = await signup(payload);
+
+      if (response.status === 201) {
+        // Call the email verification endpoint after successful signup
+        const verifyResponse = await sendEmailVerification({ email: form.email });
+
+        if (verifyResponse.status === 201) {
+          showToast("Signup successful! Verification email sent.", "success");
+        } else {
+          showToast("Signup successful, but failed to send verification email.", "error");
+        }
+
+        setTimeout(() => navigate("/whoareyou/email-verification"), 3000);
       } else {
-        showToast(response.message || "Something went wrong.", "error");
+        showToast(response.message || "Signup failed. Please try again.", "error");
       }
     } catch (error) {
       console.error(error);
@@ -92,91 +151,137 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center flex-grow space-y-6">
-      <h1 className="text-3xl font-bold mb-2">Sign Up with NSC</h1>
-      <p className="text-center text-gray-500 mb-6 uppercase tracking-widest">No Payment Required</p>
+      <h1 className="text-3xl font-bold">Sign Up with NSC</h1>
+      <p className="text-center text-gray-500 mb-8 uppercase tracking-widest">
+        {userType}
+      </p>
 
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4">
-        {/* First Row */}
-        <div className="flex gap-4">
-          <input
-            type="text"
-            placeholder="First Name"
-            required
-            name="firstName"
-            value={form.firstName}
-            onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
-          />
-          <input
-            type="text"
-            placeholder="LastName"
-            required
-            name="lastName"
-            value={form.lastName}
-            onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
-          />
-        </div>
+        {/* Render form fields based on userType */}
+        {userType === "Banker" && (
+          <>
+            <input
+              type="text"
+              placeholder="Bank Name"
+              name="bankName"
+              value={form.bankName}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+            />
+            <input
+              type="email"
+              placeholder="Official Email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+            />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              name="phoneNumber"
+              value={form.phoneNumber}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+            />
+          </>
+        )}
 
-        {/* Second Row */}
-        <input
-          type="text"
-          placeholder="Email"
-          required
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
-        />
+        {["Shipper", "Terminal Operator", "Regulators", "Shipping Lines"].includes(userType) && (
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="First Name"
+                name="firstName"
+                value={form.firstName}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                name="lastName"
+                value={form.lastName}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+              />
+            </div>
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+            />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              name="phoneNumber"
+              value={form.phoneNumber}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+            />
+            <input
+              type="text"
+              placeholder="Address"
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                name="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  handleChange(e);
+                }}
+                className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none pr-10"
+              />
+              <div
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </div>
+            </div>
+            <div className="w-full flex items-center justify-between mt-1">
+              <div className="flex-grow h-1 mr-2 bg-gray-300 relative">
+                <div className={`h-1 ${strengthColor}`}></div>
+              </div>
+              <span className="text-xs text-gray-500">Password Strength</span>
+            </div>
+          </>
+        )}
 
-        {/* Password Row */}
-        <div className="relative">
-          <input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none pr-10"
-          />
-          <div
-            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </div>
-        </div>
-
-        {/* Password Strength */}
-        <div className="w-full flex items-center justify-between mt-1">
-          <div className="flex-grow h-1 mr-2 bg-gray-300 relative">
-            <div className={`h-1 ${strengthColor}`}></div>
-          </div>
-          <span className="text-xs text-gray-500">Password Strength</span>
-        </div>
-
-        {/* NEXT Button */}
-        <button className="w-full bg-[#3d5afe] text-white py-4 mt-4 text-lg font-semibold tracking-widest hover:bg-blue-700 transition-all duration-200">
-          NEXT
+        <button
+          type="submit"
+          className="w-full bg-[#3d5afe] text-white py-4 mt-4 text-lg font-semibold tracking-widest hover:bg-blue-700 transition-all duration-200"
+        >
+          SIGN UP
         </button>
       </form>
 
-      {/* Terms */}
       <p className="mt-8 text-xs text-gray-500 text-center max-w-xs">
         By Creating an Account, it means you agree to our{' '}
         <a href="#" className="underline text-gray-600">Privacy Policy</a> and{' '}
         <a href="#" className="underline text-gray-600">Terms of Service</a>
       </p>
 
-        {/* Toast Notification */}
-        {toast.visible && (
-          <div
-            className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg text-white ${
-              toast.type === "success" ? "bg-green-500" : "bg-red-500"
-            }`}
-          >
-            {toast.message}
-          </div>
-        )}
+      {toast.visible && (
+        <div
+          className={`fixed top-4 left-[37%] transform -translate-x-1/2 px-4 py-2 rounded-lg text-white ${
+            toast.type === "success" ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
     </div>
   );
 };

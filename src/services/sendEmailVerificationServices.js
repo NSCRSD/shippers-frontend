@@ -1,10 +1,10 @@
 import Api from "../api";
 
-export const login = async (body) => {
+export const sendEmailVerification = async (body) => {
   try {
     const response = await Api({
       method: "post",
-      url: `/auth/login`,
+      url: `/auth/verify-email`,
       data: body,
     });
     return { data: response?.data, status: response?.status };
