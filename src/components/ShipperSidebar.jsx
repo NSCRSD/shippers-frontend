@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { NavLink } from 'react-router-dom';
-import { FaBars, FaTimes, FaBell} from "react-icons/fa";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { FaBars, FaTimes, FaBell, FaSignOutAlt} from "react-icons/fa";
+
 
 import { shipperMainLinks, ShipperAccountLinks } from "../constants/dummy";
 import { images } from "../constants";
@@ -8,6 +9,13 @@ import { images } from "../constants";
 
 const ShipperSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
+      const navigate = useNavigate(); // Initialize the navigate function
+    
+
+    const handleLogOut = () => {
+      localStorage.removeItem('token');
+      navigate('/login');
+    }
       
     return (
       <>
@@ -87,7 +95,15 @@ const ShipperSidebar = () => {
                   <Icon className="text-xl" />
                   <span>{name}</span>
                 </NavLink>
+                
               ))}
+              <button
+              onClick={handleLogOut}
+              className="flex items-center gap-3 px-4 py-2 rounded-md text-gray-600 font-semibold hover:text-blue-600 hover:bg-gray-100 w-full"
+              >
+                <FaSignOutAlt />
+                <span>Log out</span>
+              </button>
             </div>
           </div>
   

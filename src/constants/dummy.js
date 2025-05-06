@@ -1,4 +1,4 @@
-import { FaFileAlt, FaSignOutAlt, FaUser, FaTruck, FaChartBar, FaTachometerAlt, FaUniversity, FaGlobe, FaSlidersH } from "react-icons/fa";
+import { FaFileAlt, FaUser, FaTruck, FaChartBar, FaTachometerAlt, FaUniversity, FaGlobe, FaSlidersH } from "react-icons/fa";
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -76,7 +76,6 @@ export const shipperMainLinks = [
 export const ShipperAccountLinks = [
   { name: 'My Profile', icon: FaUser, path: '/shipper-dashboard/profile' },
   { name: 'Settings', icon: FaSlidersH, path: '/shipper-dashboard/settings' },
-  { name: 'Log out', icon: FaSignOutAlt },
 ];
 
 export const links = [

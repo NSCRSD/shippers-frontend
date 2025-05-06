@@ -94,7 +94,6 @@ const Login = () => {
     
       const token = response?.data?.access_token;
       if (response.status === 200) {
-        localStorage.setItem("token", token);
         showToast("Login successful!", "success");
         setTimeout(() => navigate("/shipper-dashboard"), 1500);
       } else {
