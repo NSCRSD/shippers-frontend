@@ -39,7 +39,7 @@ const ShipperSidebar = () => {
   
         {/* Sidebar */}
         <aside
-          className={`fixed top-0 left-0 z-50 h-[1200px] w-[270px] bg-white rounded-xl shadow-md p-4 transform transition-transform duration-300 ease-in-out
+          className={`fixed top-0 left-0 z-50 overflow-y-auto w-[270px] h-screen md:h-auto bg-white rounded-xl shadow-md p-4 transform transition-transform duration-300 ease-in-out
             ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             md:static md:translate-x-0 md:mt-8 md:ml-4`}
         >

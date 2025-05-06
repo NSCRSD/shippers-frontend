@@ -93,6 +93,7 @@ const Login = () => {
       const response = await login({ email, password });
     
       const token = response?.data?.access_token;
+      
       if (response.status === 200) {
         showToast("Login successful!", "success");
         setTimeout(() => navigate("/shipper-dashboard"), 1500);

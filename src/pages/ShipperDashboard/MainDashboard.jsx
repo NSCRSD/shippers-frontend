@@ -9,7 +9,7 @@ import { statCards, FreightOverviewChart, barData } from "../../constants/dummy"
 
 const MainDashboard = () => {
   return (
-    <main className="flex-1 p-6 space-y-6">
+    <main className="flex-1 p-6 space-y-6 md:h-screen md:overflow-y-auto">
       {/* Header */}
       <DashboardHeader />
       {/* Stat Cards */}
@@ -34,30 +34,13 @@ const MainDashboard = () => {
         </div>
         
         <div className="w-full">
-          {/* Wrapper: Flex row on md+, column on small screens */}
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-            {/* Welcome Card */}
-            <div className="flex-1 p-6 bg-gradient-to-r from-[#1a2150] to-[#0d101f] rounded-2xl shadow-md text-white">
-              <h1 className="text-xl sm:text-2xl font-semibold leading-snug">
-                Welcome back Mr. Afolabi Michael
-              </h1>
-              <p className="text-base sm:text-lg mt-1 text-gray-300">
-                To the Freight Rate Application
-              </p>
-            </div>
-
             {/* Action Buttons - vertical stack */}
-            <div className="flex flex-col gap-3 w-full md:w-auto">
-              <button className="flex items-center gap-2 justify-center bg-[#6ed4a8] hover:bg-[#5bc39a] text-white px-4 py-2 rounded-lg font-medium transition w-full md:w-48">
-                <FaUser />
-                <span className="text-sm sm:text-base">EDIT PROFILE</span>
-              </button>
+            <div className="flex w-full justify-end">
               <button className="flex items-center justify-between gap-2 bg-[#0f1b3d] hover:bg-[#1a2a57] text-white px-4 py-2 rounded-lg font-medium transition w-full md:w-48">
                 <span className="text-sm py-2">FREIGHT ANALYSIS</span>
                 <HiOutlineChevronRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
         </div>
 
         {/* Charts */}

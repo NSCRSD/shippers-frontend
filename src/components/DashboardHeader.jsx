@@ -4,7 +4,7 @@ import { HiOutlineSearch, HiOutlineCog, HiOutlineBell, HiOutlineUser, HiReply } 
 
 const DashboardHeader = () => {
   return (
-    <header className=" text-white px-4 py-4 relative">
+    <header className="sticky top-0 backdrop-blur-md bg-[#0f1b3d]/60 text-white px-4 py-4 rounded-2xl">
           {/* Top Section */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
             {/* Left Section */}
@@ -34,9 +34,6 @@ const DashboardHeader = () => {
     
               {/* Icons Section */}
               <div className="flex items-center gap-3 text-white mt-2 sm:mt-0">
-                <HiOutlineUser className="text-lg" />
-                <span className="text-sm hidden sm:inline">Sign Out</span>
-                <HiOutlineCog className="text-lg" />
                 <HiOutlineBell className="text-lg" />
               </div>
             </div>
