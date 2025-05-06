@@ -4,7 +4,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff } from 'lucide-react';
 
 import { signup } from "../../services/signupServices";
-import { sendEmailVerification } from "../../services/sendEmailVerificationServices";
 
 const Signup = () => {
   const location = useLocation();
@@ -19,6 +18,7 @@ const Signup = () => {
     bankName: "",
     address: "",
     department: "", // Added department for NSC Staff
+    division: "", // Added division for Regulatory Department
   });
 
   const [password, setPassword] = useState('');
@@ -97,6 +97,12 @@ const Signup = () => {
       return false;
     }
 
+    // Division validation for Regulatory Department
+    if (form.department === "regulatory" && !form.division) {
+      showToast("Please select your division.", "error");
+      return false;
+    }
+
     // Address validation for specific user types
     if (!form.address && ["shipper", "terminal operator", "regulators", "shipping lines"].includes(userType)) {
       showToast("Please enter your address.", "error");
@@ -128,6 +134,7 @@ const Signup = () => {
         address: form.address,
         bank_name: form.bankName,
         department: form.department,
+        division: form.division,
       };
 
       const response = await signup(payload);
@@ -239,22 +246,41 @@ const Signup = () => {
               className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
             />
             {userType === "nsc staff" && (
-              <select
-                name="department"
-                value={form.department}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
-              >
-                <option value="" disabled>
-                  Select Your Department
-                </option>
-                <option value="regulatory services department">Regulatory Services Department</option>
-                <option value="ict">ICT</option>
-                <option value="human resources">Human Resources</option>
-                <option value="finance">Finance</option>
-                <option value="legal">Legal</option>
-                <option value="consumer affairs">Consumer Affairs</option>
-              </select>
+              <>
+                <select
+                  name="department"
+                  value={form.department}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+                >
+                  <option value="" disabled>
+                    Select Your Department
+                  </option>
+                  <option value="ict">ICT</option>
+                  <option value="cad">CAD</option>
+                  <option value="sprd">SPRD</option>
+                  <option value="es">ES</option>
+                  <option value="regulatory">Regulatory</option>
+                </select>
+
+                {/* Division Dropdown for Regulatory Department */}
+                {form.department === "regulatory" && (
+                  <select
+                    name="division"
+                    value={form.division || ""}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none mt-4"
+                  >
+                    <option value="" disabled>
+                      Select Your Division
+                    </option>
+                    <option value="m_and_t">M and T</option>
+                    <option value="m_and_e">M and E</option>
+                    <option value="ssd">SSD</option>
+                    <option value="drs">DRS</option>
+                  </select>
+                )}
+              </>
             )}
             <input
               type="text"

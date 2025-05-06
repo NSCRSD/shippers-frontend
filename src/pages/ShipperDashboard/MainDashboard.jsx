@@ -1,52 +1,17 @@
 import React from 'react'
 import { Bar } from 'react-chartjs-2';
-import { HiOutlineChevronRight, HiOutlineSearch, HiOutlineCog, HiOutlineBell, HiOutlineUser } from 'react-icons/hi';
+import { HiOutlineChevronRight } from 'react-icons/hi';
+import { FaUser } from 'react-icons/fa';
 
+import { DashboardHeader } from '../../components';
 import { statCards, FreightOverviewChart, barData } from "../../constants/dummy";
 
 
 const MainDashboard = () => {
   return (
     <main className="flex-1 p-6 space-y-6">
-    <header className=" text-white px-4 py-4 relative">
-      {/* Top Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-        {/* Left Section */}
-        <div>
-          <p className="text-sm text-white/80">
-            Pages / <span className="font-semibold text-white">Dashboard</span>
-          </p>
-          <h1 className="text-lg font-bold mt-1">A SHIPPER</h1>
-        </div>
-
-        {/* Right Section */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
-          {/* Sort Button */}
-          <button className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-1 w-full sm:w-40 text-sm lg:text-lg">
-            Sort Freight <HiOutlineChevronRight className="text-sm md:text-lg" />
-          </button>
-
-          {/* Search Bar */}
-          <div className="relative w-full sm:w-64">
-            <input
-              type="text"
-              placeholder="Type"
-              className="pl-10 pr-4 py-2 rounded-lg bg-white text-black placeholder-gray-400 w-full focus:outline-none"
-            />
-            <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          </div>
-
-          {/* Icons Section */}
-          <div className="flex items-center gap-3 text-white mt-2 sm:mt-0">
-            <HiOutlineUser className="text-lg" />
-            <span className="text-sm hidden sm:inline">Sign Out</span>
-            <HiOutlineCog className="text-lg" />
-            <HiOutlineBell className="text-lg" />
-          </div>
-        </div>
-      </div>
-    </header>
-
+      {/* Header */}
+      <DashboardHeader />
       {/* Stat Cards */}
        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
        {statCards.map((card, index) => {
@@ -68,11 +33,31 @@ const MainDashboard = () => {
         })}
         </div>
         
-        <div className="w-full flex justify-end">
-            <button className="bg-[#63C48C] hover:bg-green-500 text-white font-medium px-6 py-3 rounded-md flex items-center gap-2 transition-colors duration-200">
-                MORE FREIGHT OPTIONS
-                <HiOutlineChevronRight className="text-xl" />
-            </button>
+        <div className="w-full">
+          {/* Wrapper: Flex row on md+, column on small screens */}
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            {/* Welcome Card */}
+            <div className="flex-1 p-6 bg-gradient-to-r from-[#1a2150] to-[#0d101f] rounded-2xl shadow-md text-white">
+              <h1 className="text-xl sm:text-2xl font-semibold leading-snug">
+                Welcome back Mr. Afolabi Michael
+              </h1>
+              <p className="text-base sm:text-lg mt-1 text-gray-300">
+                To the Freight Rate Application
+              </p>
+            </div>
+
+            {/* Action Buttons - vertical stack */}
+            <div className="flex flex-col gap-3 w-full md:w-auto">
+              <button className="flex items-center gap-2 justify-center bg-[#6ed4a8] hover:bg-[#5bc39a] text-white px-4 py-2 rounded-lg font-medium transition w-full md:w-48">
+                <FaUser />
+                <span className="text-sm sm:text-base">EDIT PROFILE</span>
+              </button>
+              <button className="flex items-center justify-between gap-2 bg-[#0f1b3d] hover:bg-[#1a2a57] text-white px-4 py-2 rounded-lg font-medium transition w-full md:w-48">
+                <span className="text-sm py-2">FREIGHT ANALYSIS</span>
+                <HiOutlineChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Charts */}

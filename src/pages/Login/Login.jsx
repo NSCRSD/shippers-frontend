@@ -91,22 +91,23 @@ const Login = () => {
 
     try {
       const response = await login({ email, password });
-
-      if (response?.status === 200 && response?.data?.access_token) {
+    
+      const token = response?.data?.access_token;
+      if (token) {
+        localStorage.setItem("token", token);
         showToast("Login successful!", "success");
-        // Store the token in localStorage
-        localStorage.setItem("token", response.data.access_token);
-        // Redirect to the dashboard after a short delay
         setTimeout(() => navigate("/shipper-dashboard"), 1500);
-      } else if (response?.status === 401) {
-        showToast("Invalid email or password.", "error");
       } else {
-        showToast(response?.message || "Login failed. Please try again.", "error");
+        showToast("Login failed. Please try again.", "error");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      showToast("Error connecting to the server. Please try again later.", "error");
-    }
+      if (error.response?.status === 401) {
+        showToast("Invalid email or password.", "error");
+      } else {
+        showToast("Error connecting to the server. Please try again later.", "error");
+        console.error("Login error:", error);
+      }
+    }    
   };
 
   return (

@@ -1,11 +1,15 @@
 import Api from "../api";
 
-export const sendEmailVerification = async (body) => {
+export const shipperFreighRatetApplications = async (body) => {
+  const token = localStorage.getItem('token')
   try {
     const response = await Api({
       method: "post",
-      url: "/auth/verify-email",
+      url: "/shipper/freight-rate-application",
       data: body,
+      headers: {
+        Authorization: `Bearer ${token}` ,
+     }
     });
     return { data: response?.data, status: response?.status };
   } catch (error) {
