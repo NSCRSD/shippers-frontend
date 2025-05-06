@@ -98,7 +98,7 @@ const Login = () => {
         showToast("Login successful!", "success");
         setTimeout(() => navigate("/shipper-dashboard"), 1500);
       } else {
-        showToast("Login failed. Please try again.", "error");
+        showToast(response.message || "Login failed. Please try again.", "error");
       }
     } catch (error) {
       if (error.response?.status === 401) {

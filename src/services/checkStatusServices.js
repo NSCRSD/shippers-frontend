@@ -1,10 +1,10 @@
 import Api from "../api";
 
-export const adminNotifications = async (body) => {
+export const checkStatus = async (body) => {
   try {
     const response = await Api({
       method: "get",
-      url: "/admin/admin/notifications",
+      url: "/auth/check-status",
       data: body,
     });
     return { data: response?.data, status: response?.status };
