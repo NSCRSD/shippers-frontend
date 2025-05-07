@@ -1,4 +1,4 @@
-import React, {  useEffect } from 'react';
+import React, {  useState, useEffect } from 'react';
 import { shipperBanks } from '../services/getBankServices'; // Import the Bank service
 
 
@@ -18,11 +18,11 @@ const BankCardList = () => {
         if (response?.status === 200) {
           setBankData(response?.data?.data); // Store the data in state
         } else {
-          console.log("Failed to fetch Bank data.");
+          console.log(response?.data?.message || "Failed to fetch Bank data.");
         }
       } catch (err) {
         console.error(err);
-        console.log(response?.data?.message || "An error occurred while fetching Bank data.");
+        console.log("An error occurred while fetching Bank data.");
       } 
     };
 
