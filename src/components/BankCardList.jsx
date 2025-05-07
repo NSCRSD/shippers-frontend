@@ -1,36 +1,66 @@
-import React, {  useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { shipperBanks } from '../services/getBankServices'; // Import the Bank service
-
+import { shipperConnectBanks } from '../services/connectToBankForShipperServices'; // Import the connect to Bank service
 
 const BankCardList = () => {
-  const [bankData, setBankData] = useState([]); // State to store Bank data
+  const [bankData, setBankData] = useState([]);
+  const [toast, setToast] = useState({ message: "", type: "", visible: false });
+
+  // Wrap showToast in useCallback
+  const showToast = useCallback((message, type) => {
+    setToast({ message, type, visible: true });
+    setTimeout(() => setToast({ ...toast, visible: false }), 3000);
+  }, [toast]);
 
   useEffect(() => {
     const fetchBank = async () => {
       try {
-        const response = await shipperBanks(); // Call the Bank service
-
-        // Log the entire response to inspect its structure
+        const response = await shipperBanks();
         console.log("API Response:", response);
 
-        console.log("Bank Data:", response?.data?.data); // Log the Bank data
-        
         if (response?.status === 200) {
-          setBankData(response?.data?.data); // Store the data in state
+          setBankData(response?.data?.data);
         } else {
-          console.log(response?.data?.message || "Failed to fetch Bank data.");
+          showToast(response?.data?.message || "Failed to fetch Bank data.", "error");
         }
       } catch (err) {
         console.error(err);
-        console.log("An error occurred while fetching Bank data.");
-      } 
+        showToast("An error occurred while fetching Bank data.", "error");
+      }
     };
 
-    fetchBank(); // Call the fetchBank function
-  }, []);
+    fetchBank();
+  }, [showToast]); // Add showToast to the dependency array
+
+  const handleSubmit = async (bankId) => {
+    try {
+      const payload = { bank_id: bankId };
+      const response = await shipperConnectBanks(payload);
+
+      if (response.status === 201) {
+        console.log("Bank connected successfully:", response.data);
+        showToast("Bank connected successfully!", "success");
+      } else {
+        showToast(response.message || "Failed to connect to the bank. Please try again.", "error");
+      }
+    } catch (error) {
+      console.error(error);
+      showToast("Server error. Try again later.", "error");
+    }
+  };
 
   return (
     <div className="space-y-4">
+      {toast.visible && (
+        <div
+          className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg text-white ${
+            toast.type === "success" ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
+
       {bankData.map((bank) => (
         <div
           key={bank.id}
@@ -44,28 +74,22 @@ const BankCardList = () => {
             />
             <div>
               <h3 className="text-lg font-semibold text-gray-900">{bank.bank_name}</h3>
-              <p className="text-sm text-gray-700 flex items-center gap-1">
-                <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                {bank.location}
-              </p>
+              <p className="text-sm text-gray-700">{bank.location}</p>
               <p className="text-sm text-gray-600">
                 Contact: <strong>{bank.official_email}</strong>
               </p>
             </div>
           </div>
-          <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md">
+          <button
+            onClick={() => handleSubmit(bank.id)}
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md"
+          >
             Connect
           </button>
         </div>
       ))}
     </div>
   );
-}
+};
 
-export default BankCardList
+export default BankCardList;
