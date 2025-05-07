@@ -1,18 +1,11 @@
-// components/ProtectedRoute.jsx
-import { Navigate } from 'react-router-dom';
-import { isTokenValid } from '../utils/auth';
+// import React from 'react';
+// import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
-  const isValid = isTokenValid();
-
-  console.log('Token valid:', isValid); // Debugging line
-
-  if (!isValid) {
-    localStorage.removeItem('token');
-    return <Navigate to="/login" />;
-  }
-
-  return children;
+  return  children
 };
 
 export default ProtectedRoute;
+
+// const token = localStorage.getItem('token');
+// return token ? children : <Navigate to="/login" />;

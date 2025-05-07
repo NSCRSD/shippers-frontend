@@ -320,7 +320,7 @@ const Signup = () => {
 
         <button
           type="submit"
-          className="w-full bg-[#3d5afe] text-white py-4 mt-4 text-lg font-semibold tracking-widest hover:bg-blue-700 transition-all duration-200"
+          className="w-full max-w-[400px] md:max-w-[600px] bg-[#3d5afe] text-white py-4 mt-4 text-lg font-semibold tracking-widest hover:bg-blue-700 transition-all duration-200"
         >
           SIGN UP
         </button>

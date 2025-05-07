@@ -1,5 +1,5 @@
 import React from 'react'
-import { HiOutlineSearch, HiOutlineCog, HiOutlineBell, HiOutlineUser, HiReply } from 'react-icons/hi';
+import { HiOutlineSearch, HiOutlineBell, HiOutlineHome } from 'react-icons/hi';
 
 
 const DashboardHeader = () => {
@@ -9,18 +9,14 @@ const DashboardHeader = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
             {/* Left Section */}
             <div>
-              <p className="text-sm text-white/80">
-                Pages / <span className="font-semibold text-white">Dashboard</span>
+              <p className="text-sm text-white/80 font-semibold">
+                Shipper
               </p>
-              <h1 className="text-lg font-bold mt-1">A SHIPPER</h1>
+              <h1 className="text-lg font-bold mt-1">Mr. Micheal Afolabi</h1>
             </div>
     
             {/* Right Section */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
-              {/* Sort Button */}
-              <button className="flex items-center justify-between gap-2 bg-[#0f1b3d] hover:bg-[#1a2a57] text-white px-4 py-2 rounded-lg font-medium transition w-full md:w-48">
-              <HiReply className="font-extrabold text-2xl w-4 h-4" /> <span className="text-sm py-1">BACK TO STREAMS </span> 
-              </button>
+            <div className="flex  items-start sm:items-center gap-3 w-full md:w-auto">
     
               {/* Search Bar */}
               <div className="relative w-full sm:w-64">
@@ -34,6 +30,7 @@ const DashboardHeader = () => {
     
               {/* Icons Section */}
               <div className="flex items-center gap-3 text-white mt-2 sm:mt-0">
+                <HiOutlineHome className="text-lg" />
                 <HiOutlineBell className="text-lg" />
               </div>
             </div>

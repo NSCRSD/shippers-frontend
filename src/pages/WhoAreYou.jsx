@@ -48,7 +48,7 @@ const WhoAreYou = () => {
       {/* Next Button */}
       <button
         onClick={handleNext} // Call handleNext on button click
-        className="w-[400px] md:w-[600px] bg-[#3d5afe] text-white py-4 text-lg font-semibold tracking-wide hover:bg-blue-700 transition-all duration-200"
+        className="w-full max-w-[400px] md:max-w-[600px] bg-[#3d5afe] text-white py-4 text-lg font-semibold tracking-wide hover:bg-blue-700 transition-all duration-200"
       >
         NEXT
       </button>

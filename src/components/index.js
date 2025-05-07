@@ -10,3 +10,4 @@ export { default as DashboardHeader } from './DashboardHeader';
 export { default as FreightRateComp } from './FreightRateComp';
 export { default as ProgressBar } from './ProgressBar';
 export { default as BankCardList } from './BankCardList';
+export { default as Loader } from './Loader';
