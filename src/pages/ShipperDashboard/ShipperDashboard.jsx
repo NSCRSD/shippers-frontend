@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Outlet } from 'react-router-dom';
 
-import { dashboard } from "../../services/dashboardServices";
+// import { dashboard } from "../../services/dashboardServices";
 import { ShipperSidebar } from "../../components";
 import { images } from "../../constants";
  
 
 const ShipperDashboard = () => {
-  const [dashboardData, setDashboardData] = useState([]); // State to store dashboard data
+  // const [dashboardData, setDashboardData] = useState([]); // State to store dashboard data
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const response = await dashboard(); // Call the dashboard service
-        if (response?.status === 200) {
-          setDashboardData(response.data); // Store the data in state
-        } else {
-          console.log("Failed to fetch dashboard data.");
-        }
-      } catch (err) {
-        console.error(err);
-        console.log("An error occurred while fetching dashboard data.");
-      } 
-    };
+  // useEffect(() => {
+  //   const fetchDashboard = async () => {
+  //     try {
+  //       const response = await dashboard(); // Call the dashboard service
+  //       if (response?.status === 200) {
+  //         setDashboardData(response.data); // Store the data in state
+  //       } else {
+  //         console.log("Failed to fetch dashboard data.");
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //       console.log("An error occurred while fetching dashboard data.");
+  //     } 
+  //   };
 
-    fetchDashboard(); // Call the fetchDashboard function
-  }, []);
+  //   fetchDashboard(); // Call the fetchDashboard function
+  // }, []);
 
   
   return (

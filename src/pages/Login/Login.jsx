@@ -91,14 +91,38 @@ const Login = () => {
 
     try {
       const response = await login({ email, password });
-    
-      const token = response?.data?.access_token;
       
-      if (response.status === 200) {
+      // Log the entire response to inspect its structure
+      console.log("API Response:", response);
+    
+      const token = response?.data?.data?.access_token;
+      const userId = response?.data?.data?.user_id;
+      const userType = response?.data?.data?.user_type;
+
+      console.log("Token:", token);
+      console.log("User ID:", userId);
+      console.log("User Type:", userType);
+
+
+    
+      if (response.status === 200 && token) {
+        // Save session info
+        localStorage.setItem("token", token);
+        localStorage.setItem("user_id", userId);
+        localStorage.setItem("user_type", userType);
+    
         showToast("Login successful!", "success");
-        setTimeout(() => navigate("/shipper-dashboard"), 1500);
+    
+        // Navigate based on user type
+        if (userType === "shipper") {
+          setTimeout(() => navigate("/shipper-dashboard"), 1500);
+        } else if (userType === "bank") {
+          setTimeout(() => navigate("/bank-dashboard"), 1500);
+        } else {
+          setTimeout(() => navigate("/dashboard"), 1500);
+        }
       } else {
-        showToast(response.message || "Login failed. Please try again.", "error");
+        showToast(response?.data?.message || "Login failed. Please try again.", "error");
       }
     } catch (error) {
       if (error.response?.status === 401) {
@@ -107,7 +131,7 @@ const Login = () => {
         showToast("Error connecting to the server. Please try again later.", "error");
         console.error("Login error:", error);
       }
-    }    
+    }  
   };
 
   return (
