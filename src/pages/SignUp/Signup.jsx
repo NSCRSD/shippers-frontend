@@ -45,11 +45,11 @@ const Signup = () => {
   }[strength];
 
   const validateInputs = () => {
-    if (!form.firstName && ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff"].includes(userType)) {
+    if (!form.firstName && ["shipper", "terminal", "regulator", "shipping_line", "nsc", "vessel_charter"].includes(userType)) {
       showToast("Please enter your first name.", "error");
       return false;
     }
-    if (!form.lastName && ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff"].includes(userType)) {
+    if (!form.lastName && ["shipper", "terminal", "regulator", "shipping_line", "nsc", "vessel_charter"].includes(userType)) {
       showToast("Please enter your last name.", "error");
       return false;
     }
@@ -71,14 +71,14 @@ const Signup = () => {
 
     // Password validation for specific user types
     if (
-      ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff", "banker"].includes(userType) &&
+      ["shipper", "terminal", "regulator", "shipping_line", "nsc", "bank", "vessel_charter"].includes(userType) &&
       !password
     ) {
       showToast("Please enter your password.", "error");
       return false;
     }
     if (
-      ["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff", "banker"].includes(userType) &&
+      ["shipper", "terminal", "regulator", "shipping_line", "nsc", "bank", "vessel_charter"].includes(userType) &&
       password.length < 6
     ) {
       showToast("Password must be at least 6 characters long.", "error");
@@ -86,13 +86,13 @@ const Signup = () => {
     }
 
     // Bank-specific validation
-    if (!form.bankName && userType === "banker") {
+    if (!form.bankName && userType === "bank") {
       showToast("Please enter your bank name.", "error");
       return false;
     }
 
-    // Department validation for NSC Staff
-    if (!form.department && userType === "nsc staff") {
+    // Department validation for NSC
+    if (!form.department && userType === "nsc") {
       showToast("Please select your department.", "error");
       return false;
     }
@@ -104,7 +104,7 @@ const Signup = () => {
     }
 
     // Address validation for specific user types
-    if (!form.address && ["shipper", "terminal operator", "regulators", "shipping lines"].includes(userType)) {
+    if (!form.address && ["shipper", "terminal", "regulator", "shipping_line", "vessel_charter"].includes(userType)) {
       showToast("Please enter your address.", "error");
       return false;
     }
@@ -209,7 +209,7 @@ const Signup = () => {
           </>
         )}
 
-        {["shipper", "terminal operator", "regulators", "shipping lines", "nsc staff"].includes(userType) && (
+        {["shipper", "terminal", "regulator", "shipping_line", "nsc", "vessel_charter"].includes(userType) && (
           <>
             <div className="grid grid-cols-2 gap-4">
               <input
@@ -245,7 +245,7 @@ const Signup = () => {
               onChange={handleChange}
               className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
             />
-            {userType === "nsc staff" && (
+            {userType === "nsc" && (
               <>
                 <select
                   name="department"

@@ -126,7 +126,7 @@ const Navbar = () => {
       </div>
 
       <div className="w-full h-20 md:h-auto md:basis-3/12 lg:basis-2/12 flex justify-end">
-        <Link to="/whoareyou"
+        <Link to="/login"
             className="app__flex bg-black text-white text-lg font-bold px-8 py-3 rounded-none w-full lg:w-auto lg:rounded h-20 lg:h-auto"
         >
             Log In
