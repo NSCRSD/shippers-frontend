@@ -1,60 +1,28 @@
 import React, {  useEffect } from 'react';
 import { shipperBanks } from '../services/getBankServices'; // Import the Bank service
 
-const bankData = [
-  {
-    id: 1,
-    name: 'GUARANTY TRUST BANK',
-    location: 'Lagos, Nigeria.',
-    contact: 'maritime@gtbank.com',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/GTCO_Logo.png', // Replace with real URL from API
-  },
-  {
-    id: 1,
-    name: 'GUARANTY TRUST BANK',
-    location: 'Lagos, Nigeria.',
-    contact: 'maritime@gtbank.com',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/GTCO_Logo.png', // Replace with real URL from API
-  },
-  {
-    id: 1,
-    name: 'GUARANTY TRUST BANK',
-    location: 'Lagos, Nigeria.',
-    contact: 'maritime@gtbank.com',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/GTCO_Logo.png', // Replace with real URL from API
-  },
-  {
-    id: 1,
-    name: 'GUARANTY TRUST BANK',
-    location: 'Lagos, Nigeria.',
-    contact: 'maritime@gtbank.com',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/GTCO_Logo.png', // Replace with real URL from API
-  },
-  {
-    id: 1,
-    name: 'GUARANTY TRUST BANK',
-    location: 'Lagos, Nigeria.',
-    contact: 'maritime@gtbank.com',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/GTCO_Logo.png', // Replace with real URL from API
-  },
-  // Add more banks here
-];
 
 const BankCardList = () => {
-  // const [bankData, setBankData] = useState([]); // State to store Bank data
+  const [bankData, setBankData] = useState([]); // State to store Bank data
 
   useEffect(() => {
     const fetchBank = async () => {
       try {
         const response = await shipperBanks(); // Call the Bank service
+
+        // Log the entire response to inspect its structure
+        console.log("API Response:", response);
+
+        console.log("Bank Data:", response?.data?.data); // Log the Bank data
+        
         if (response?.status === 200) {
-          // setBankData(response.data); // Store the data in state
+          setBankData(response?.data?.data); // Store the data in state
         } else {
           console.log("Failed to fetch Bank data.");
         }
       } catch (err) {
         console.error(err);
-        console.log("An error occurred while fetching Bank data.");
+        console.log(response?.data?.message || "An error occurred while fetching Bank data.");
       } 
     };
 
@@ -71,11 +39,11 @@ const BankCardList = () => {
           <div className="flex items-center gap-4">
             <img
               src={bank.logo}
-              alt={`${bank.name} logo`}
+              alt={`${bank.bank_name} logo`}
               className="w-16 h-16 rounded-md object-contain"
             />
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">{bank.name}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{bank.bank_name}</h3>
               <p className="text-sm text-gray-700 flex items-center gap-1">
                 <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                   <path
@@ -87,7 +55,7 @@ const BankCardList = () => {
                 {bank.location}
               </p>
               <p className="text-sm text-gray-600">
-                Contact: <strong>{bank.contact}</strong>
+                Contact: <strong>{bank.official_email}</strong>
               </p>
             </div>
           </div>
