@@ -31,7 +31,7 @@ const ShipperDashboard = () => {
   return (
   <div className="relative flex min-h-screen bg-gray-100">
     <div
-    className="absolute h-[400px] bg-cover w-full bg-center bg-[#3182CE] flex items-center justify-center text-white text-center px-4"
+    className="absolute h-[300px] bg-cover w-full bg-center bg-[#3182CE] flex items-center justify-center text-white text-center px-4"
     style={{
         backgroundImage: `url(${images.dashboardbg})`,
     }}

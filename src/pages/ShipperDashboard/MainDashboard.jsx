@@ -1,7 +1,6 @@
 import React from 'react'
 import { Bar } from 'react-chartjs-2';
 import { HiOutlineChevronRight } from 'react-icons/hi';
-import { FaUser } from 'react-icons/fa';
 
 import { DashboardHeader } from '../../components';
 import { statCards, FreightOverviewChart, barData } from "../../constants/dummy";
@@ -33,15 +32,6 @@ const MainDashboard = () => {
         })}
         </div>
         
-        <div className="w-full">
-            {/* Action Buttons - vertical stack */}
-            <div className="flex w-full justify-end">
-              <button className="flex items-center justify-between gap-2 bg-[#0f1b3d] hover:bg-[#1a2a57] text-white px-4 py-2 rounded-lg font-medium transition w-full md:w-48">
-                <span className="text-sm py-2">FREIGHT ANALYSIS</span>
-                <HiOutlineChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-        </div>
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">

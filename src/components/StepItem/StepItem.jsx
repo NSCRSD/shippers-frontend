@@ -5,7 +5,7 @@ const steps = [
   { title: "STEP 1", description: "Who Are You" },
   { title: "STEP 2", description: "Fill The Form To Sign Up" },
   { title: "STEP 3", description: "Verify Email" },
-  { title: "FINAL STEP", description: "Log In" },
+  { title: "FINAL STEP", description: "Await Validation" },
 ];
 
 export default function StepItem({ currentStep }) {

@@ -1,10 +1,11 @@
 // src/pages/Login.jsx
 import React, { useState, useEffect } from "react";
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { login } from "../../services/loginServices";
 import { images } from "../../constants";
+import Loader from "../../components/Loader"; // Import the Loader component
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,34 +13,33 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "", visible: false });
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [loading, setLoading] = useState(false); // State to manage the loader
+  const navigate = useNavigate();
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      image: images.laptop, 
-      quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      author: 'Shipping Quote Author',
+      image: images.laptop,
+      quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      author: "Shipping Quote Author",
     },
     {
       image: images.laptop,
-      quote: 'Second slide quote goes here.',
-      author: 'Second Author',
+      quote: "Second slide quote goes here.",
+      author: "Second Author",
     },
     {
       image: images.laptop,
-      quote: 'Third slide quote here.',
-      author: 'Third Author',
+      quote: "Third slide quote here.",
+      author: "Third Author",
     },
   ];
 
-  
   const showToast = (message, type) => {
     setToast({ message, type, visible: true });
-    setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000); // Corrected
+    setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 3000);
   };
-  
 
   // Auto-slide effect
   useEffect(() => {
@@ -49,7 +49,6 @@ const Login = () => {
 
     return () => clearInterval(interval);
   }, [slides.length]);
-
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberedEmail");
@@ -90,58 +89,61 @@ const Login = () => {
     }
 
     try {
+      setLoading(true); // Show the loader
       const response = await login({ email, password });
-      
-      // Log the entire response to inspect its structure
-      console.log("API Response:", response);
-    
+
       const token = response?.data?.data?.access_token;
       const userId = response?.data?.data?.user_id;
       const userType = response?.data?.data?.user_type;
+      const first_name = response?.data?.data?.first_name;
+      const last_name = response?.data?.data?.last_name;
 
-      console.log("Token:", token);
-      console.log("User ID:", userId);
-      console.log("User Type:", userType);
-
-
-    
       if (response.status === 200 && token) {
         // Save session info
         localStorage.setItem("token", token);
         localStorage.setItem("user_id", userId);
         localStorage.setItem("user_type", userType);
-    
-        // Navigate based on user type
-        if (userType === "shipper") {
-          navigate("/shipper-dashboard");
-        } else if (userType === "bank") {
-          navigate("/bank-dashboard");
-        } else {
-          navigate("/dashboard");
-        }
+        localStorage.setItem("first_name", first_name);
+        localStorage.setItem("last_name", last_name);
+
+           
+          // Navigate based on user type
+          if (userType === "shipper") {
+            setLoading(false);
+            navigate("/shipper-dashboard/dashboard");
+          } else if (userType === "bank") {
+            setLoading(false);
+            navigate("/bank-dashboard");
+          } else {
+            setLoading(false);
+            navigate("/dashboard");
+          }
       } else {
-        showToast(response?.data?.message || "Login failed. Please try again.", "error");
+        setLoading(false); // Hide the loader
+        showToast(response?.message || "Login failed. Please try again.", "error");
       }
     } catch (error) {
+      setLoading(false); // Hide the loader
       if (error.response?.status === 401) {
         showToast("Invalid email or password.", "error");
       } else {
         showToast("Error connecting to the server. Please try again later.", "error");
         console.error("Login error:", error);
       }
-    }  
+    }
   };
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
+      {loading && <Loader />} {/* Show the loader when loading */}
       {/* Left Section */}
       <div className="flex flex-col w-full lg:w-3/4 relative">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-center px-6 py-4 lg:px-10 lg:py-6">
+        <div className="flex justify-between items-center px-6 py-4 lg:px-10 lg:py-6">
           <Link to="/home">
             <img src={images.logo} alt="Logo" className="w-40 lg:w-60 mb-2" />
           </Link>
-          <div className="flex items-center space-x-2">
+          <div className="hidden lg:flex items-center space-x-2">
             <p className="text-gray-600 text-sm">No Account yet?</p>
             <Link
               to="/whoareyou"

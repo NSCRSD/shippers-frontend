@@ -1,9 +1,10 @@
 // src/pages/Signup.jsx
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from "lucide-react";
 
 import { signup } from "../../services/signupServices";
+import Loader from "../../components/Loader"; // Import the Loader component
 
 const Signup = () => {
   const location = useLocation();
@@ -17,31 +18,32 @@ const Signup = () => {
     password: "",
     bankName: "",
     address: "",
-    department: "", // Added department for NSC Staff
-    division: "", // Added division for Regulatory Department
+    department: "",
+    division: "",
   });
 
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "", visible: false });
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [loading, setLoading] = useState(false); // State to manage the loader
+  const navigate = useNavigate();
 
   const showToast = (message, type) => {
     setToast({ message, type, visible: true });
-    setTimeout(() => setToast({ ...toast, visible: false }), 3000); // Hide toast after 3 seconds
+    setTimeout(() => setToast({ ...toast, visible: false }), 5000); // Hide toast after 5 seconds
   };
 
   const getPasswordStrength = (pwd) => {
-    if (pwd.length > 8 && /[A-Z]/.test(pwd) && /[\d\W]/.test(pwd)) return 'strong';
-    if (pwd.length > 5) return 'medium';
-    return 'weak';
+    if (pwd.length > 8 && /[A-Z]/.test(pwd) && /[\d\W]/.test(pwd)) return "strong";
+    if (pwd.length > 5) return "medium";
+    return "weak";
   };
 
   const strength = getPasswordStrength(password);
   const strengthColor = {
-    weak: 'bg-red-500 w-1/3',
-    medium: 'bg-yellow-500 w-2/3',
-    strong: 'bg-green-500 w-full'
+    weak: "bg-red-500 w-1/3",
+    medium: "bg-yellow-500 w-2/3",
+    strong: "bg-green-500 w-full",
   }[strength];
 
   const validateInputs = () => {
@@ -69,7 +71,6 @@ const Signup = () => {
       return false;
     }
 
-    // Password validation for specific user types
     if (
       ["shipper", "terminal", "regulator", "shipping_line", "nsc", "bank", "vessel_charter"].includes(userType) &&
       !password
@@ -85,26 +86,22 @@ const Signup = () => {
       return false;
     }
 
-    // Bank-specific validation
     if (!form.bankName && userType === "bank") {
       showToast("Please enter your bank name.", "error");
       return false;
     }
 
-    // Department validation for NSC
     if (!form.department && userType === "nsc") {
       showToast("Please select your department.", "error");
       return false;
     }
 
-    // Division validation for Regulatory Department
     if (form.department === "regulatory" && !form.division) {
       showToast("Please select your division.", "error");
       return false;
     }
 
-    // Address validation for specific user types
-    if (!form.address && ["shipper", "terminal", "regulator", "shipping_line", "vessel_charter"].includes(userType)) {
+    if (!form.address && ["shipper", "terminal", "regulator", "shipping_line", "vessel_charter", "bank"].includes(userType)) {
       showToast("Please enter your address.", "error");
       return false;
     }
@@ -137,23 +134,26 @@ const Signup = () => {
         division: form.division,
       };
 
+      setLoading(true); // Show the loader
       const response = await signup(payload);
 
       if (response.status === 201) {
-
-        showToast("Signup successful! Verification email sent.", "success");
-        setTimeout(() => navigate("/whoareyou/email-verification"), 3000);
+          setLoading(false); // Hide the loader
+          navigate("/whoareyou/email-verification", { state: { userType, email: form.email } });
       } else {
-        showToast(response.message || "Signup failed. Please try again.", "error");
+        setLoading(false); // Hide the loader
+        showToast(response?.message || "Signup failed. Please try again.", "error");
       }
     } catch (error) {
       console.error(error);
+      setLoading(false); // Hide the loader
       showToast("Server error. Try again later.", "error");
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center flex-grow space-y-6">
+      {loading && <Loader />} {/* Show the loader when loading */}
       <h1 className="text-3xl font-bold">Sign Up with NSC</h1>
       <p className="text-center text-gray-500 mb-8 uppercase tracking-widest">
         {userType}
@@ -161,7 +161,7 @@ const Signup = () => {
 
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4">
         {/* Render form fields based on userType */}
-        {userType === "banker" && (
+        {userType === "bank" && (
           <>
             <input
               type="text"
@@ -187,9 +187,17 @@ const Signup = () => {
               onChange={handleChange}
               className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
             />
+            <input
+              type="text"
+              placeholder="Address"
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+            />
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 name="password"
                 value={password}
@@ -205,6 +213,12 @@ const Signup = () => {
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </div>
+            </div>
+            <div className="w-full flex items-center justify-between mt-1">
+              <div className="flex-grow h-1 mr-2 bg-gray-300 relative">
+                <div className={`h-1 ${strengthColor}`}></div>
+              </div>
+              <span className="text-xs text-gray-500">Password Strength</span>
             </div>
           </>
         )}
@@ -292,7 +306,7 @@ const Signup = () => {
             />
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 name="password"
                 value={password}
@@ -327,9 +341,14 @@ const Signup = () => {
       </form>
 
       <p className="mt-8 text-xs text-gray-500 text-center max-w-xs">
-        By Creating an Account, it means you agree to our{' '}
-        <a href="#" className="underline text-gray-600">Privacy Policy</a> and{' '}
-        <a href="#" className="underline text-gray-600">Terms of Service</a>
+        By Creating an Account, it means you agree to our{" "}
+        <a href="#" className="underline text-gray-600">
+          Privacy Policy
+        </a>{" "}
+        and{" "}
+        <a href="#" className="underline text-gray-600">
+          Terms of Service
+        </a>
       </p>
 
       {toast.visible && (

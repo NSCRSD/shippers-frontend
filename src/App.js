@@ -6,7 +6,8 @@ import { ScrollToTop } from './hooks';
 import {
   Home, Stakeholders, TankerFreight, Tools, CargoStatistics, Publications,
   Login, Signup, ResetPassword, NotFound, WhoAreYou, EmailVerification,
-  Bank, FreightRateForm, FreightRateRequest, Profile, Settings
+  Bank, FreightRateForm, FreightRateRequest, FreightAnalysis, Profile, Settings,
+  CheckValidation
 } from './pages';
 import {
   Navbar, Footer, SignUpLayout, ProtectedRoute, Loader
@@ -33,6 +34,7 @@ const AppRoutes = () => {
   const prevPathRef = useRef(location.pathname);
   const [loading, setLoading] = useState(false);
   const [fade, setFade] = useState(true);
+  const [delayedLocation, setDelayedLocation] = useState(location); // Track the delayed location
 
   useEffect(() => {
     const prevSegment = getTopSegment(prevPathRef.current);
@@ -43,23 +45,27 @@ const AppRoutes = () => {
     if (segmentChanged) {
       setFade(false); // Trigger fade-out
       setLoading(true);
+
       const timeout = setTimeout(() => {
+        setDelayedLocation(location); // Update the delayed location (preserve state)
         setLoading(false);
         setFade(true); // Trigger fade-in
         prevPathRef.current = location.pathname;
-      }, 500);
+      }, 2500); // Delay of 2500ms
+
       return () => clearTimeout(timeout);
     } else {
+      setDelayedLocation(location); // Update the delayed location immediately
       prevPathRef.current = location.pathname;
     }
-  }, [location.pathname]);
+  }, [location]);
 
   return (
     <>
       {loading && <Loader />}
-      <div className={`transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`transition-opacity duration-500 ${fade && 'opacity-100'}`}>
         <div className="app__container scroll-smooth snap-none">
-          <Routes>
+          <Routes location={delayedLocation}> {/* Use delayedLocation for routing */}
             {/* Top-level public routes */}
             <Route path="/" element={<MainLayout><Home /></MainLayout>} />
             <Route path="/home" element={<MainLayout><Home /></MainLayout>} />
@@ -74,15 +80,17 @@ const AppRoutes = () => {
               <Route index element={<WhoAreYou />} />
               <Route path="signup" element={<Signup />} />
               <Route path="email-verification" element={<EmailVerification />} />
+              <Route path="check-validation" element={<CheckValidation />} />
             </Route>
 
             {/* Dashboard Routes */}
             <Route path="/shipper-dashboard" element={<ProtectedRoute><ShipperDashboard /></ProtectedRoute>}>
               <Route index element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
-              <Route path="main-dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
+              <Route path="dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
               <Route path="bank" element={<ProtectedRoute><Bank /></ProtectedRoute>} />
               <Route path="freight-rate-form" element={<ProtectedRoute><FreightRateForm /></ProtectedRoute>} />
               <Route path="freight-rate-request" element={<ProtectedRoute><FreightRateRequest /></ProtectedRoute>} />
+              <Route path="freight-analysis" element={<ProtectedRoute><FreightAnalysis /></ProtectedRoute>} />
               <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             </Route>
@@ -108,3 +116,5 @@ const App = () => {
 };
 
 export default App;
+
+

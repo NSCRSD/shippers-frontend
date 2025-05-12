@@ -3,7 +3,7 @@ import Api from "../api";
 export const checkStatus = async (body) => {
   try {
     const response = await Api({
-      method: "get",
+      method: "post",
       url: "/auth/check-status",
       data: body,
     });

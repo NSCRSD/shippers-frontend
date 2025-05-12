@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { HiMenuAlt4, HiX } from "react-icons/hi";
 
 import { links } from "../../constants/dummy";
 import { images } from "../../constants";
 import "./navbar.scss";
-
-
 
 const activeLink = "text-[#58A986] font-bold";
 const normalLink = "text-black hover:text-zinc-500 ease-in duration-300 font-bold";
@@ -17,7 +15,23 @@ const menuLink = "text-black hover:text-[#58A986] ease-in duration-300 font-bold
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   const [openMenus, setOpenMenus] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+  const [initials, setInitials] = useState(""); // Store user initials
   const timeoutRefs = {};
+  const navigate = useNavigate(); // Initialize navigate function
+
+  useEffect(() => {
+    const first_name = localStorage.getItem("first_name");
+    const last_name = localStorage.getItem("last_name");
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+      setInitials(`${first_name[0]}${last_name[0]}`.toUpperCase()); // Set initials
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   const handleMouseEnter = (level, key) => {
     clearTimeout(timeoutRefs[level]);
@@ -33,33 +47,43 @@ const Navbar = () => {
   const renderDropdown = (items, level = 1) => {
     return (
       <ul
-  className={`absolute left-full top-0 mt-0 ml-1 w-56 bg-white shadow-lg z-[${
-    level + 10
-  }] transition-all duration-200`}
->
-  {items.map((item) => (
-    <li
-      key={item.name}
-      className="relative"
-      onMouseEnter={() => handleMouseEnter(level, item.name)}
-      onMouseLeave={() => handleMouseLeave(level)}
-    >
-      <Link
-        to={`/${item.link}`}
-        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 hover:border-l-4 hover:border-[#185F95] font-medium relative transition-all duration-200 transform hover:scale-105"
+        className={`absolute left-full top-0 mt-0 ml-1 w-56 bg-white shadow-lg z-[${
+          level + 10
+        }] transition-all duration-200`}
       >
-        {item.name}
-      </Link>
-      {item.dropdown && openMenus[level] === item.name && (
-        <div className="absolute top-0 left-full">
-          {renderDropdown(item.dropdown, level + 1)}
-        </div>
-      )}
-    </li>
-  ))}
-</ul>
-
+        {items.map((item) => (
+          <li
+            key={item.name}
+            className="relative"
+            onMouseEnter={() => handleMouseEnter(level, item.name)}
+            onMouseLeave={() => handleMouseLeave(level)}
+          >
+            <Link
+              to={`/${item.link}`}
+              className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 hover:border-l-4 hover:border-[#185F95] font-medium relative transition-all duration-200 transform hover:scale-105"
+            >
+              {item.name}
+            </Link>
+            {item.dropdown && openMenus[level] === item.name && (
+              <div className="absolute top-0 left-full">
+                {renderDropdown(item.dropdown, level + 1)}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
     );
+  };
+
+  const handleInitialsClick = () => {
+    const user_type = localStorage.getItem("user_type");
+    if (user_type === "shipper") {
+      navigate("/shipper-dashboard/profile");
+    } else if (user_type === "bank") {
+      navigate("/banker-dashboard/profile");
+    } else {
+      navigate("/dashboard/profile");
+    }
   };
 
   return (
@@ -126,16 +150,26 @@ const Navbar = () => {
       </div>
 
       <div className="w-full h-20 md:h-auto md:basis-3/12 lg:basis-2/12 flex justify-end">
-        <Link to="/login"
+        {isLoggedIn ? (
+          <div
+            onClick={handleInitialsClick} // Navigate to the appropriate profile
+            className="app__flex bg-black text-white text-lg font-bold px-8 py-3 rounded-none w-full lg:w-auto lg:rounded h-20 lg:h-auto justify-center items-center cursor-pointer"
+          >
+            {initials} {/* Display user initials */}
+          </div>
+        ) : (
+          <Link
+            to="/login"
             className="app__flex bg-black text-white text-lg font-bold px-8 py-3 rounded-none w-full lg:w-auto lg:rounded h-20 lg:h-auto"
-        >
+          >
             Log In
-        </Link>
+          </Link>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
 
 

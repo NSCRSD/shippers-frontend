@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { checkStatus } from "../services/checkStatusServices";
 import Loader from "../components/Loader"; // Import the Loader component
 
-const EmailVerification = () => {
+const CheckValidation = () => {
   const location = useLocation();
   const { email } = location.state || {};
   const navigate = useNavigate(); // Initialize the navigate function
@@ -18,41 +18,29 @@ const EmailVerification = () => {
 
         console.log("Response from checkStatus:", response);
 
-        const { is_verified, is_validated, user_type } = response?.data?.data;
+        const { is_validated } = response?.data?.data;
 
-        if (is_verified) {
+        if (is_validated) {
           setLoading(true); // Show the loader
-          clearInterval(interval); // Stop the interval once verified
+          clearInterval(interval); // Stop the interval once validated
 
-          if (
-            (user_type === "bank" ||
-              user_type === "shipping_line" ||
-              user_type === "terminal" ||
-              user_type === "regulator" ||
-              user_type === "nsc") &&
-            !is_validated
-          ) {
-            setLoading(false); // Hide the loader after delay
-            navigate("/whoareyou/check-validation", { state: { email } });
-          } else {
-            setLoading(false); // Hide the loader after delay
-            navigate("/login"); // Redirect to login for all other cases
-          }
+          setLoading(false); // Hide the loader after delay
+          navigate("/login"); // Redirect to login
         }
       } catch (error) {
         console.error("Failed to check user status:", error);
       }
-    }, 20000); // 20 seconds
+    }, 300000); // 5 minutes
 
     return () => clearInterval(interval);
-  }, []);
+  }, [email, navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center flex-grow max-w-lg space-y-6">
       {loading && <Loader />} {/* Show the loader when loading */}
-      <h1 className="text-4xl font-bold">Email Verification Sent</h1>
+      <h1 className="text-center text-4xl font-bold">Your Account has been Created</h1>
       <p className="text-center text-2xl text-gray-500 mb-8 tracking-widest">
-        Check Mail for verification
+        It Awaits Departmental Validation. Check Email for Response.
       </p>
 
       <Link
@@ -65,4 +53,4 @@ const EmailVerification = () => {
   );
 };
 
-export default EmailVerification;
+export default CheckValidation;

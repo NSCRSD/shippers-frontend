@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from "../utils/loader";
+
 
 const WhoAreYou = () => {
   const [userType, setUserType] = useState(""); // State to store selected user type
@@ -19,6 +21,7 @@ const WhoAreYou = () => {
     }
 
     // Navigate to Signup page for other user types
+    Loader(); // Start loader
     navigate("/whoareyou/signup", { state: { userType } });
   };
 

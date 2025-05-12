@@ -67,10 +67,11 @@ export const barData = {
 };
 
 export const shipperMainLinks = [
-  { name: 'Dashboard', icon: FaTachometerAlt, path: '/shipper-dashboard/main-dashboard' },
+  { name: 'Dashboard', icon: FaTachometerAlt, path: '/shipper-dashboard/dashboard' },
   { name: 'Bank', icon: FaUniversity, path: '/shipper-dashboard/bank' },
   { name: 'Freight Rate Form', icon: FaFileAlt, path: '/shipper-dashboard/freight-rate-form' },
   { name: 'Freight Rate Request', icon: FaGlobe, path: '/shipper-dashboard/freight-rate-request' },
+  { name: 'Freight Analysis', icon: FaChartBar, path: '/shipper-dashboard/freight-analysis' },
 ];
   
 export const ShipperAccountLinks = [
@@ -113,12 +114,6 @@ export const links = [
             {
               name: "CRD Portal",
               link: "tools/trms/crd",
-              dropdown: [
-                { name: "Fright Rate Confirmation", link: "tools/trms/crd/fright-rate-confirmation" },
-                { name: "Charter Party Confirmation", link: "tools/trms/crd/charter-party-confirmation" },
-                { name: "Demurrage Confirmation ", link: "tools/trms/crd/demurrage-confirmation " },
-                { name: "Authorized Dealer Banks", link: "tools/trms/crd/authorized-dealer-banks" },
-              ],
             },
             {
               name: "Bill of Laden",

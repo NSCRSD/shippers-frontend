@@ -6,7 +6,7 @@ import { images } from '../constants';
 
 const SignUpLayout = () => {
   const location = useLocation();
-  const isEmailVerification = location.pathname === '/whoareyou/email-verification';
+  const isEmailVerification = location.pathname === '/whoareyou/email-verification' || '/whoareyou/check-validation';
 
   // Find current step based on path
   const getCurrentStep = () => {
@@ -19,7 +19,7 @@ const SignUpLayout = () => {
         return 2;
       case '/whoareyou/email-verification':
         return 3;
-      case '/login':
+      case '/whoareyou/check-validation':
         return 4;
       default:
         return 0;

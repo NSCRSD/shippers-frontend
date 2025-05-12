@@ -1,8 +1,13 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { HiOutlineSearch, HiOutlineBell, HiOutlineHome } from 'react-icons/hi';
 
 
 const DashboardHeader = () => {
+  const first_name = localStorage.getItem("first_name");
+  const last_name = localStorage.getItem("last_name");
+
+
   return (
     <header className="sticky top-0 backdrop-blur-md bg-[#0f1b3d]/60 text-white px-4 py-4 rounded-2xl">
           {/* Top Section */}
@@ -12,7 +17,7 @@ const DashboardHeader = () => {
               <p className="text-sm text-white/80 font-semibold">
                 Shipper
               </p>
-              <h1 className="text-lg font-bold mt-1">Mr. Micheal Afolabi</h1>
+              <h1 className="text-lg font-bold mt-1">{`${first_name} ${last_name}`}</h1>
             </div>
     
             {/* Right Section */}
@@ -30,7 +35,9 @@ const DashboardHeader = () => {
     
               {/* Icons Section */}
               <div className="flex items-center gap-3 text-white mt-2 sm:mt-0">
-                <HiOutlineHome className="text-lg" />
+                <Link to="/home">
+                  <HiOutlineHome className="text-lg cursor-pointer" />
+                </Link>
                 <HiOutlineBell className="text-lg" />
               </div>
             </div>

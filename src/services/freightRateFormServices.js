@@ -1,10 +1,10 @@
 import Api from "../api";
 
-export const shipperFreighRateApplications = async (body) => {
+export const shipperFreighRateForm = async (body) => {
   try {
     const response = await Api({
       method: "post",
-      url: "/shipper/freight-rate-application",
+      url: "/shipper/freight-rate-form",
       data: body,
     });
     return { data: response?.data, status: response?.status };

@@ -13,7 +13,8 @@ const ShipperSidebar = () => {
     
 
     const handleLogOut = () => {
-      localStorage.removeItem('token');
+      localStorage.clear()
+
       navigate('/login');
     }
       
@@ -90,7 +91,13 @@ const ShipperSidebar = () => {
                   key={name}
                   to={path}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 px-4 py-2 rounded-md text-gray-600 font-semibold hover:text-blue-600 hover:bg-gray-100"
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-2 rounded-md font-semibold transition ${
+                      isActive
+                        ? 'bg-blue-100 text-blue-600 shadow'
+                        : 'text-gray-500 hover:bg-gray-100 hover:text-blue-600'
+                    }`
+                  }
                 >
                   <Icon className="text-xl" />
                   <span>{name}</span>
