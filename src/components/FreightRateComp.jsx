@@ -26,6 +26,7 @@ export default function FreightRateForm() {
     total_price: '',
   });
   const [connectedBanks, setConnectedBanks] = useState([]); // State to store connected banks
+  const [applicationId, setApplicationId] = useState(null); // State to store application_id
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
@@ -37,7 +38,7 @@ export default function FreightRateForm() {
     return (units * price).toString(); // Return as a string to maintain text input compatibility
   };
 
- // Fetch connected banks when the form loads
+  // Fetch connected banks when the form loads
   useEffect(() => {
     const fetchConnectedBanks = async () => {
       try {
@@ -59,20 +60,19 @@ export default function FreightRateForm() {
 
   const handleNextStep = async (e) => {
     e.preventDefault();
-    
-  
+
     if (step === 0 && !formData.title) {
       setError('Please enter a valid title.');
       setLoading(false); // Stop the loader
       return;
     }
-  
+
     if (step === 1 && !formData.cci_number) {
       setError('Please enter a valid CCI Number.');
       setLoading(false); // Stop the loader
       return;
     }
-  
+
     if (step === 1) {
       try {
         // Submit title and CCI number
@@ -80,15 +80,17 @@ export default function FreightRateForm() {
           title: formData.title,
           cci_number: formData.cci_number,
         });
+
         setLoading(true); // Show the loader
-  
+
         if (prefilledResponse.status === 200) {
           setLoading(false);
           setError('');
           setFormData((prev) => ({
             ...prev,
             ...prefilledResponse?.data?.data?.cbn_data, // Merge prefilled data into the form
-          })); // Set the form data with the prefilled response
+          }));
+          setApplicationId(prefilledResponse?.data?.data?.application_id); // Store application_id
           setDirection(1);
           setStep((prev) => prev + 1);
         } else {
@@ -102,7 +104,7 @@ export default function FreightRateForm() {
       }
       return;
     }
-  
+
     setError('');
     if (step < steps.length - 1) {
       setDirection(1);
@@ -122,12 +124,16 @@ export default function FreightRateForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await shipperFreighRateForm(formData); // Call the API service
+      const payload = {
+        ...formData,
+        application_id: applicationId, // Include application_id in the payload
+      };
+
+      const response = await shipperFreighRateForm(payload); // Call the API service
       if (response.status === 200) {
         setSuccessMessage('Freight rate submitted successfully!');
         setFormData({
@@ -146,6 +152,7 @@ export default function FreightRateForm() {
           price_per_unit: '',
           total_price: '',
         });
+        setApplicationId(null); // Reset application_id
         setStep(0); // Reset the form
       } else {
         setError(response?.message || 'Failed to submit freight rate.');
