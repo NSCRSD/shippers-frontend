@@ -6,6 +6,7 @@ import { HiOutlineSearch, HiOutlineBell, HiOutlineHome } from 'react-icons/hi';
 const DashboardHeader = () => {
   const first_name = localStorage.getItem("first_name");
   const last_name = localStorage.getItem("last_name");
+  const user_type = localStorage.getItem("user_type");
 
 
   return (
@@ -15,9 +16,11 @@ const DashboardHeader = () => {
             {/* Left Section */}
             <div>
               <p className="text-sm text-white/80 font-semibold">
-                Shipper
+                {user_type}
               </p>
-              <h1 className="text-lg font-bold mt-1">{`${first_name} ${last_name}`}</h1>
+              <h1 className="text-lg font-bold mt-1">
+                {user_type === "bank" ? first_name : `${first_name} ${last_name}`}
+              </h1>
             </div>
     
             {/* Right Section */}

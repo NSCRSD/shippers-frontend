@@ -22,9 +22,9 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await forgotPassword(email);
+      const response = await forgotPassword({email: email});
 
-      if (response.ok) {
+      if (response.status === 200) {
         showToast('Password reset link sent to your email.', 'success');
       } else {
         showToast(response?.message || 'Something went wrong.', 'error');

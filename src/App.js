@@ -7,7 +7,9 @@ import {
   Home, Stakeholders, TankerFreight, Tools, CargoStatistics, Publications,
   Login, Signup, ResetPassword, NotFound, WhoAreYou, EmailVerification,
   Bank, FreightRateForm, FreightRateRequest, FreightAnalysis, Profile, Settings,
-  CheckValidation
+  CheckValidation, BankDashboard, MainBankDashboard, BankFreightRateRequest, 
+  CharterPartyRequest, DemurrageRequest, VesselCharterers, SubmissionRequests, ConnectionRequests,
+  ForgotPassword
 } from './pages';
 import {
   Navbar, Footer, SignUpLayout, ProtectedRoute, Loader
@@ -83,7 +85,7 @@ const AppRoutes = () => {
               <Route path="check-validation" element={<CheckValidation />} />
             </Route>
 
-            {/* Dashboard Routes */}
+            {/* Shipper Dashboard Routes */}
             <Route path="/shipper-dashboard" element={<ProtectedRoute><ShipperDashboard /></ProtectedRoute>}>
               <Route index element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
               <Route path="dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
@@ -95,9 +97,24 @@ const AppRoutes = () => {
               <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             </Route>
 
+            {/* Bank Dashboard Routes */}
+            <Route path="/bank-dashboard" element={<ProtectedRoute><BankDashboard /></ProtectedRoute>}>
+              <Route index element={<ProtectedRoute><MainBankDashboard /></ProtectedRoute>} />
+              <Route path="dashboard" element={<ProtectedRoute><MainBankDashboard /></ProtectedRoute>} />
+              <Route path="freight-rate-request" element={<ProtectedRoute><BankFreightRateRequest /></ProtectedRoute>} />
+              <Route path="charter-party-request" element={<ProtectedRoute><CharterPartyRequest /></ProtectedRoute>} />
+              <Route path="demurrage-request" element={<ProtectedRoute><DemurrageRequest /></ProtectedRoute>} />
+              <Route path="vessel-charterers" element={<ProtectedRoute><VesselCharterers /></ProtectedRoute>} />
+              <Route path="submission-request" element={<ProtectedRoute><SubmissionRequests /></ProtectedRoute>} />
+              <Route path="connection-requests" element={<ProtectedRoute><ConnectionRequests /></ProtectedRoute>} />
+              <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            </Route>
+
             {/* Login/Reset */}
             <Route path="/login" element={<Login />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password?token" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

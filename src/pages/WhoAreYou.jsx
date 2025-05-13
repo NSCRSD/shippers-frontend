@@ -57,13 +57,6 @@ const WhoAreYou = () => {
         NEXT
       </button>
 
-      {/* Terms */}
-      <p className="mt-8 text-xs text-gray-500 max-w-l">
-        By Creating an Account, it means you agree to our{' '}
-        <a href="#" className="underline text-gray-600">Privacy Policy</a> and{' '}
-        <a href="#" className="underline text-gray-600">Terms of Service</a>
-      </p>
-
       {/* Toast Notification */}
       {toast.visible && (
         <div

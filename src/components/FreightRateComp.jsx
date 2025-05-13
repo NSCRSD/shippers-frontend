@@ -27,8 +27,9 @@ export default function FreightRateForm() {
   });
   const [connectedBanks, setConnectedBanks] = useState([]); // State to store connected banks
   const [applicationId, setApplicationId] = useState(null); // State to store application_id
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState('');
   const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
   const [loading, setLoading] = useState(false);
 
@@ -38,14 +39,33 @@ export default function FreightRateForm() {
     return (units * price).toString(); // Return as a string to maintain text input compatibility
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.nxp_number.trim()) newErrors.nxp_number = 'Form NXP Application No is required';
+    if (!formData.invoice_number.trim()) newErrors.invoice_number = 'Invoice No is required';
+    if (!formData.bill_of_lading_number.trim()) newErrors.bill_of_lading_number = 'BL No is required';
+    if (!formData.beneficiary.trim()) newErrors.beneficiary = 'Beneficiary is required';
+    if (!formData.voyage_from.trim()) newErrors.voyage_from = 'Voyage From is required';
+    if (!formData.voyage_to.trim()) newErrors.voyage_to = 'Voyage To is required';
+    if (!formData.cargo.trim()) newErrors.cargo = 'Cargo is required';
+    if (!formData.number_of_units.trim()) newErrors.number_of_units = 'Number of Units is required';
+    if (!formData.price_per_unit.trim()) newErrors.price_per_unit = 'Freight Price per Unit is required';
+  
+    return newErrors;
+  };
+  
+
   // Fetch connected banks when the form loads
   useEffect(() => {
     const fetchConnectedBanks = async () => {
       try {
         const response = await shipperConnectedBanks();
-        console.log('Connected Banks Response:', response?.data?.data);
+        console.log('Connected Banks Response:', response?.data.data);
+
         if (response.status === 200 && response?.data?.data?.length > 0) {
-          setConnectedBanks(response?.data?.data); // Store connected banks
+          // Extract bank_name from the response and store it in connectedBanks
+          const bankNames = response.data.data.map((bank) => bank.bank_name);
+          setConnectedBanks(bankNames); // Store only the bank names
         } else {
           setError('No connected banks found. Please connect to a bank.');
         }
@@ -125,7 +145,15 @@ export default function FreightRateForm() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setError('Please fix the errors above');
+      return;
+    }
+    setErrors({});
+    setError('');
+    setSuccessMessage('Form submitted successfully!');
 
     try {
       const payload = {
@@ -267,7 +295,6 @@ export default function FreightRateForm() {
                 className="w-full border border-black p-2"
                 type="text"
                 readOnly
-                required
               />
             </div>
     
@@ -280,7 +307,6 @@ export default function FreightRateForm() {
                 className="w-full border border-black p-2"
                 type="text"
                 readOnly
-                required
               />
             </div>
     
@@ -293,7 +319,6 @@ export default function FreightRateForm() {
                 className="w-full border border-black p-2"
                 type="text"
                 readOnly
-                required
               />
             </div>
     
@@ -310,7 +335,7 @@ export default function FreightRateForm() {
               ) : connectedBanks.length === 1 ? (
                 <input
                   name="bank"
-                  value={connectedBanks[0].name}
+                  value={connectedBanks[0]}
                   onChange={handleChange}
                   className="w-full border border-black p-2"
                   type="text"
@@ -323,9 +348,9 @@ export default function FreightRateForm() {
                   className="w-full border border-black p-2"
                 >
                   <option value="">Select a bank</option>
-                  {connectedBanks.map((bank) => (
-                    <option key={bank.id} value={bank.name}>
-                      {bank.name}
+                  {connectedBanks.map((bank, index) => (
+                    <option key={index} value={bank}>
+                      {bank}
                     </option>
                   ))}
                 </select>
@@ -342,6 +367,7 @@ export default function FreightRateForm() {
                 type="text"
                 required
               />
+              {errors.beneficiary && <p className="text-red-500 text-sm mt-1">{errors.beneficiary}</p>}
             </div>
     
             <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -355,6 +381,7 @@ export default function FreightRateForm() {
                   type="text"
                   required
                 />
+                {errors.voyage_from && <p className="text-red-500 text-sm mt-1">{errors.voyage_from}</p>}
               </div>
               <div>
                 <label className="block mb-1">Voyage To</label>
@@ -366,6 +393,7 @@ export default function FreightRateForm() {
                   type="text"
                   required
                 />
+                {errors.voyage_to && <p className="text-red-500 text-sm mt-1">{errors.voyage_to}</p>}
               </div>
             </div>
 
@@ -379,56 +407,60 @@ export default function FreightRateForm() {
                 type="text"
                 required
               />
+              {errors.cargo && <p className="text-red-500 text-sm mt-1">{errors.cargo}</p>}
             </div>
     
             <div>
-              <label className="block mb-1">No. of Units</label>
-              <input
-                name="number_of_units"
-                value={formData.number_of_units}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
-                  setFormData((prev) => ({
-                    ...prev,
-                    number_of_units: value,
-                    total_price: calculateTotalPrice(value, formData.price_per_unit), // Update total price
-                  }));
-                }}
-                className="w-full border border-black p-2"
-                type="text"
-                required
-              />
-            </div>
+  <label className="block mb-1">No. of Units</label>
+  <input
+    name="number_of_units"
+    value={`$${formData.number_of_units.replace(/[^0-9]/g, '')}`} // Add leading dollar sign
+    onChange={(e) => {
+      const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+      setFormData((prev) => ({
+        ...prev,
+        number_of_units: value,
+        total_price: calculateTotalPrice(value, formData.price_per_unit), // Update total price
+      }));
+    }}
+    className="w-full border border-black p-2"
+    type="text"
+    required
+  />
+  {errors.number_of_units && <p className="text-red-500 text-sm mt-1">{errors.number_of_units}</p>}
+</div>
 
-            <div>
-              <label className="block mb-1">Freight Price / Unit</label>
-              <input
-                name="price_per_unit"
-                value={formData.price_per_unit}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
-                  setFormData((prev) => ({
-                    ...prev,
-                    price_per_unit: value,
-                    total_price: calculateTotalPrice(formData.number_of_units, value), // Update total price
-                  }));
-                }}
-                className="w-full border border-black p-2"
-                type="text"
-                required
-              />
-            </div>
+<div>
+  <label className="block mb-1">Freight Price / Unit</label>
+  <input
+    name="price_per_unit"
+    value={`$${formData.price_per_unit.replace(/[^0-9]/g, '')}`} // Add leading dollar sign
+    onChange={(e) => {
+      const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+      setFormData((prev) => ({
+        ...prev,
+        price_per_unit: value,
+        total_price: calculateTotalPrice(formData.number_of_units, value), // Update total price
+      }));
+    }}
+    className="w-full border border-black p-2"
+    type="text"
+    required
+  />
+  {errors.price_per_unit && <p className="text-red-500 text-sm mt-1">{errors.price_per_unit}</p>}
+</div>
 
-            <div>
-              <label className="block mb-1">Freight Total Price</label>
-              <input
-                name="total_price"
-                value={formData.total_price}
-                className="w-full border border-black p-2"
-                type="text"
-                readOnly // Make it read-only to prevent manual editing
-              />
-            </div>
+<div>
+  <label className="block mb-1">Freight Total Price</label>
+  <input
+    name="total_price"
+    value={`$${formData.total_price}`} // Add leading dollar sign
+    className="w-full border border-black p-2"
+    type="text"
+    readOnly // Make it read-only to prevent manual editing
+  />
+  {errors.total_price && <p className="text-red-500 text-sm mt-1">{errors.total_price}</p>}
+</div>
     
             <div className="col-span-1 sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
               <button
@@ -440,7 +472,6 @@ export default function FreightRateForm() {
             </div>
           </form>
     
-          {error && <p className="text-red-600 mt-4">{error}</p>}
           {successMessage && <p className="text-green-600 mt-4">{successMessage}</p>}
         </div>
       )

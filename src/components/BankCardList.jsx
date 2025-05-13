@@ -4,26 +4,32 @@ import { shipperConnectBanks } from '../services/connectToBankForShipperServices
 
 const BankCardList = () => {
   const [bankData, setBankData] = useState([]); // State to store Bank data
+  const [connectionStatus, setConnectionStatus] = useState({}); // State to track connection status of each bank
 
   useEffect(() => {
     const fetchBank = async () => {
       try {
         const response = await shipperBanks(); // Call the Bank service
 
-        // Log the entire response to inspect its structure
         console.log("API Response:", response);
 
-        console.log("Bank Data:", response?.data?.data); // Log the Bank data
-        
         if (response?.status === 200) {
-          setBankData(response?.data?.data); // Store the data in state
+          const banks = response?.data?.data || [];
+          setBankData(banks); // Store the bank data
+
+          // Initialize connection status based on the fetched data
+          const initialStatus = {};
+          banks.forEach((bank) => {
+            initialStatus[bank.id] = bank.is_connected ? 'connected' : 'not_connected';
+          });
+          setConnectionStatus(initialStatus);
         } else {
           console.log(response?.data?.message || "Failed to fetch Bank data.");
         }
       } catch (err) {
         console.error(err);
         console.log("An error occurred while fetching Bank data.");
-      } 
+      }
     };
 
     fetchBank(); // Call the fetchBank function
@@ -31,21 +37,33 @@ const BankCardList = () => {
 
   const handleSubmit = async (bankId) => {
     try {
+      // Set the status to "Connecting..."
+      setConnectionStatus((prev) => ({ ...prev, [bankId]: 'connecting' }));
+
       const payload = {
-        bank_id: bankId, 
+        bank_id: bankId,
       };
 
       const response = await shipperConnectBanks(payload);
 
       if (response.status === 201) {
-        // Handle successful connection to the bank
+        // Set the status to "Connected"
+        setConnectionStatus((prev) => ({ ...prev, [bankId]: 'connected' }));
         console.log("Bank connected successfully:", response.data);
+      } else if (
+        response?.message === "You have already requested or connected to this bank."
+      ) {
+        // Handle the case where the bank is already connected
+        setConnectionStatus((prev) => ({ ...prev, [bankId]: 'connected' }));
+        console.log("Bank is already connected or requested.");
       } else {
         console.log(response.message || "Failed to connect to the bank. Please try again.", "error");
+        setConnectionStatus((prev) => ({ ...prev, [bankId]: 'failed' }));
       }
     } catch (error) {
       console.error(error);
       console.log("Server error. Try again later.", "error");
+      setConnectionStatus((prev) => ({ ...prev, [bankId]: 'failed' }));
     }
   };
 
@@ -84,9 +102,20 @@ const BankCardList = () => {
             </div>
             <button
               onClick={() => handleSubmit(bank.id)} // Pass the bank ID when clicked
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md"
+              disabled={connectionStatus[bank.id] === 'connected' || connectionStatus[bank.id] === 'connecting'} // Disable if connected or connecting
+              className={`px-6 py-2 rounded-md ${
+                connectionStatus[bank.id] === 'connected'
+                  ? 'bg-gray-400 text-white cursor-not-allowed'
+                  : connectionStatus[bank.id] === 'connecting'
+                  ? 'bg-blue-500 text-white cursor-not-allowed'
+                  : 'bg-green-600 hover:bg-green-700 text-white'
+              }`}
             >
-              Connect
+              {connectionStatus[bank.id] === 'connected'
+                ? 'Connected'
+                : connectionStatus[bank.id] === 'connecting'
+                ? 'Connecting...'
+                : 'Connect'}
             </button>
           </div>
         ))

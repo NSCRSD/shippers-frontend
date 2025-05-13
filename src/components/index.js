@@ -5,6 +5,7 @@ export { default as SmartAuthLink } from './SmartAuthLink';
 export { default as SignUpLayout } from './SignUpLayout';
 export { default as StepItem } from './StepItem/StepItem';
 export { default as ShipperSidebar } from './ShipperSidebar';
+export { default as BankSidebar } from './BankSidebar';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as DashboardHeader } from './DashboardHeader';
 export { default as FreightRateComp } from './FreightRateComp';

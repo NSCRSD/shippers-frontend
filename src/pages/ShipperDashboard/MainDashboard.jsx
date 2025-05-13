@@ -1,6 +1,5 @@
 import React from 'react'
 import { Bar } from 'react-chartjs-2';
-import { HiOutlineChevronRight } from 'react-icons/hi';
 
 import { DashboardHeader } from '../../components';
 import { statCards, FreightOverviewChart, barData } from "../../constants/dummy";

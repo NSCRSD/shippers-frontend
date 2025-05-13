@@ -340,17 +340,6 @@ const Signup = () => {
         </button>
       </form>
 
-      <p className="mt-8 text-xs text-gray-500 text-center max-w-xs">
-        By Creating an Account, it means you agree to our{" "}
-        <a href="#" className="underline text-gray-600">
-          Privacy Policy
-        </a>{" "}
-        and{" "}
-        <a href="#" className="underline text-gray-600">
-          Terms of Service
-        </a>
-      </p>
-
       {toast.visible && (
         <div
           className={`fixed top-4 left-[37%] transform -translate-x-1/2 px-4 py-2 rounded-lg text-white ${

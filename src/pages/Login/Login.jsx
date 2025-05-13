@@ -113,7 +113,7 @@ const Login = () => {
             navigate("/shipper-dashboard/dashboard");
           } else if (userType === "bank") {
             setLoading(false);
-            navigate("/bank-dashboard");
+            navigate("/bank-dashboard/dashboard");
           } else {
             setLoading(false);
             navigate("/dashboard");
@@ -203,12 +203,12 @@ const Login = () => {
                   />
                   <span className="text-gray-700">Remember Me</span>
                 </label>
-                <a
-                  href="#"
+                <Link
+                  to="/forgot-password"
                   className="text-gray-500 hover:underline text-sm mt-2 lg:mt-0"
                 >
                   Forgot Password?
-                </a>
+                </Link>
               </div>
 
               <button
