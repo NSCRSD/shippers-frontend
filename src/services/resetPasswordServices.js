@@ -4,7 +4,7 @@ export const resetPassword = async (body) => {
   try {
     const response = await Api({
       method: "post",
-      url: `/rest-password`,
+      url: `auth/reset-password/${body.token}`,
       data: body,
     });
     return { data: response?.data, status: response?.status };

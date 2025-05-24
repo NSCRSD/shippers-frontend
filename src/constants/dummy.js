@@ -66,6 +66,7 @@ export const barData = {
   ],
 };
 
+/* Shipper Dashboard paths */
 export const shipperMainLinks = [
   { name: 'Dashboard', icon: FaTachometerAlt, path: '/shipper-dashboard/dashboard' },
   { name: 'Bank', icon: FaUniversity, path: '/shipper-dashboard/bank' },
@@ -79,6 +80,7 @@ export const ShipperAccountLinks = [
   { name: 'Settings', icon: FaSlidersH, path: '/shipper-dashboard/settings' },
 ];
 
+/* Bank Dashboard paths */
 export const bankMainLinks = [
   { name: 'Dashboard', icon: FaTachometerAlt, path: '/bank-dashboard/dashboard' },
   { name: 'Freight Rate Request', icon: FaUniversity, path: '/bank-dashboard/freight-rate-request' },
@@ -92,6 +94,19 @@ export const bankMainLinks = [
 export const bankAccountLinks = [
   { name: 'My Profile', icon: FaUser, path: '/bank-dashboard/profile' },
   { name: 'Settings', icon: FaSlidersH, path: '/bank-dashboard/settings' },
+];
+
+/* Regulator Dashboard paths */
+export const regulatorMainLinks = [
+  { name: 'Dashboard', icon: FaTachometerAlt, path: '/regulator-dashboard/dashboard' },
+  { name: 'Freight Rate Request', icon: FaUniversity, path: '/regulator-dashboard/freight-rate-request' },
+  { name: 'Charter Party Request', icon: FaFileAlt, path: '/regulator-dashboard/charter-party-request' },
+  { name: 'Demurrage Request', icon: FaGlobe, path: '/regulator-dashboard/demurrage-request' },
+];
+
+export const regulatorAccountLinks = [
+  { name: 'My Profile', icon: FaUser, path: '/regulator-dashboard/profile' },
+  { name: 'Settings', icon: FaSlidersH, path: '/regulator-dashboard/settings' },
 ];
 
 export const links = [
@@ -154,7 +169,7 @@ export const links = [
         { name: "B'Odogwu", link: "tools/bodogwu" },
         { name: "Eto Call-Up System", link: "tools/eto" },
         { name: "PIMS", link: "tools/pims" },
-        { name: "NIMASA Vessel Tracker", link: "tools/nimasa" },
+        { name: "C4I", link: "tools/nimasa" },
         { name: "PSSP", link: "tools/pssp" },
       ],
     },

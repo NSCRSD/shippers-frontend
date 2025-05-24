@@ -9,7 +9,8 @@ import {
   Bank, FreightRateForm, FreightRateRequest, FreightAnalysis, Profile, Settings,
   CheckValidation, BankDashboard, MainBankDashboard, BankFreightRateRequest, 
   CharterPartyRequest, DemurrageRequest, VesselCharterers, SubmissionRequests, ConnectionRequests,
-  ForgotPassword
+  ForgotPassword, RegulatorDashboard, MainRegulatorDashboard, RegulatorFreightRateRequest,
+  RegulatorCharterPartyRequest, RegulatorDemurrageRequest
 } from './pages';
 import {
   Navbar, Footer, SignUpLayout, ProtectedRoute, Loader
@@ -111,14 +112,26 @@ const AppRoutes = () => {
               <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             </Route>
 
+            {/* Regulators Dashboard Routes */}
+            <Route path="/regulator-dashboard" element={<ProtectedRoute><RegulatorDashboard /></ProtectedRoute>}>
+              <Route index element={<ProtectedRoute><MainRegulatorDashboard /></ProtectedRoute>} />
+              <Route path="dashboard" element={<ProtectedRoute><MainRegulatorDashboard /></ProtectedRoute>} />
+              <Route path="freight-rate-request" element={<ProtectedRoute><RegulatorFreightRateRequest /></ProtectedRoute>} />
+              <Route path="charter-party-request" element={<ProtectedRoute><RegulatorCharterPartyRequest /></ProtectedRoute>} />
+              <Route path="demurrage-request" element={<ProtectedRoute><RegulatorDemurrageRequest /></ProtectedRoute>} />
+              <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            </Route>
+
             {/* Login/Reset */}
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password?token" element={<ResetPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </div>
+      
     </>
   );
 };

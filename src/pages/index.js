@@ -26,5 +26,11 @@ export { default as DemurrageRequest } from './BankDashboard/DemurrageRequest';
 export { default as VesselCharterers } from './BankDashboard/VesselCharterers';
 export { default as SubmissionRequests } from './BankDashboard/SubmissionRequests';
 export { default as ConnectionRequests } from './BankDashboard/ConnectionRequests';
+export { default as RegulatorDashboard } from './RegulatorDashboard/RegulatorDashboard';
+export { default as MainRegulatorDashboard } from './RegulatorDashboard/MainRegulatorDashboard';
+export { default as RegulatorFreightRateRequest } from './RegulatorDashboard/RegulatorFreightRateRequest';
+export { default as RegulatorCharterPartyRequest } from './RegulatorDashboard/RegulatorCharterPartyRequest';
+export { default as RegulatorDemurrageRequest } from './RegulatorDashboard/RegulatorDemurrageRequest';
 export { default as Profile } from './Profile';
 export { default as Settings } from './Settings';
+

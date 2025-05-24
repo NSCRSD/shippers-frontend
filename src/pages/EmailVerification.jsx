@@ -16,8 +16,6 @@ const EmailVerification = () => {
       try {
         const response = await checkStatus({ email }); // Pass the email to checkStatus
 
-        console.log("Response from checkStatus:", response);
-
         const { is_verified, is_validated, user_type } = response?.data?.data;
 
         if (is_verified) {
@@ -45,7 +43,7 @@ const EmailVerification = () => {
     }, 20000); // 20 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [email, navigate]); // Add email and navigate to dependencies
 
   return (
     <div className="flex flex-col items-center justify-center flex-grow max-w-lg space-y-6">
