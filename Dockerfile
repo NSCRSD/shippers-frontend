@@ -1,29 +1,26 @@
 # ---- Build Stage ----
-FROM node:18.20-alpine3.19 AS builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Use --prefer-offline and disable audits for speed
 COPY package.json package-lock.json ./
-RUN npm install --prefer-offline --no-audit --no-fund
+RUN npm ci
 
 COPY . ./
 RUN npm run build
 
 # ---- Production Stage ----
-FROM nginx:1.25-alpine
+FROM node:18-alpine
 
-# Remove default config if not used
-RUN rm -rf /usr/share/nginx/html/*
+WORKDIR /app
 
-COPY --from=builder /app/build /usr/share/nginx/html
+# Install the lightweight static server
+RUN npm install -g serve
 
-EXPOSE 80
+# Copy built React app from builder
+COPY --from=builder /app/build ./build
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
 
-# ---- Production Stage (just copy build) ----
-#FROM alpine:latest
-
-# Optional: Install a simple HTTP server (if you want to serve directly for testing)
-#RUN apk add --no-cache nginx
+# Serve the build folder
+CMD ["serve", "-s", "build", "-l", "3000"]
