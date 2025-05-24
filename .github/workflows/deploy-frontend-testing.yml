@@ -2,11 +2,9 @@ name: Deploy Frontend to Testing Server
 
 on:
   push:
-    branches:
-      - testing
+    branches: [testing]
   pull_request:
-    branches:
-      - testing
+    branches: [testing]
 
 jobs:
   deploy:
@@ -16,12 +14,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy via SSH
+      - name: Write SSH private key to file
+        run: |
+          echo "${{ secrets.TEST_SERVER_SSH_KEY }}" | sed 's/\\n/\n/g' > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: SSH connection test
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@13.58.255.54 'echo "SSH connection test passed"'
+
+      - name: Deploy via SSH with key file
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.TEST_SERVER_HOST }}
-          username: ${{ secrets.TEST_SERVER_USER }}
-          key: ${{ secrets.TEST_SERVER_SSH_KEY }}
+          host: 13.58.255.54
+          username: ubuntu
+          key_path: private_key.pem
           script: |
             cd /home/ubuntu/shippers-frontend
             git pull origin testing
