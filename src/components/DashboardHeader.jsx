@@ -19,7 +19,7 @@ const DashboardHeader = () => {
                 {user_type}
               </p>
               <h1 className="text-lg font-bold mt-1">
-                {user_type === "bank" ? first_name : `${first_name} ${last_name}`}
+               {user_type === "bank" ? first_name : `${first_name} ${last_name}`}
               </h1>
             </div>
     

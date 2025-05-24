@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProgressBar from './ProgressBar'; // Your existing component
 import { ArrowLeft } from 'lucide-react'; // Optional icon library or replace with SVG
@@ -145,6 +145,7 @@ export default function FreightRateForm() {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -182,10 +183,13 @@ export default function FreightRateForm() {
         });
         setApplicationId(null); // Reset application_id
         setStep(0); // Reset the form
+        setLoading(false); // Stop the loader
       } else {
+        setLoading(false);
         setError(response?.message || 'Failed to submit freight rate.');
       }
     } catch (error) {
+      setLoading(false);
       console.error('Error submitting freight rate:', error);
       setError('An error occurred. Please try again later.');
     }
@@ -411,66 +415,66 @@ export default function FreightRateForm() {
             </div>
     
             <div>
-  <label className="block mb-1">No. of Units</label>
-  <input
-    name="number_of_units"
-    value={`$${formData.number_of_units.replace(/[^0-9]/g, '')}`} // Add leading dollar sign
-    onChange={(e) => {
-      const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
-      setFormData((prev) => ({
-        ...prev,
-        number_of_units: value,
-        total_price: calculateTotalPrice(value, formData.price_per_unit), // Update total price
-      }));
-    }}
-    className="w-full border border-black p-2"
-    type="text"
-    required
-  />
-  {errors.number_of_units && <p className="text-red-500 text-sm mt-1">{errors.number_of_units}</p>}
-</div>
+            <label className="block mb-1">No. of Units</label>
+            <input
+              name="number_of_units"
+              value={formData.number_of_units.replace(/[^0-9]/g, '')}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                setFormData((prev) => ({
+                  ...prev,
+                  number_of_units: value,
+                  total_price: calculateTotalPrice(value, formData.price_per_unit), // Update total price
+                }));
+              }}
+              className="w-full border border-black p-2"
+              type="text"
+              required
+            />
+            {errors.number_of_units && <p className="text-red-500 text-sm mt-1">{errors.number_of_units}</p>}
+          </div>
 
-<div>
-  <label className="block mb-1">Freight Price / Unit</label>
-  <input
-    name="price_per_unit"
-    value={`$${formData.price_per_unit.replace(/[^0-9]/g, '')}`} // Add leading dollar sign
-    onChange={(e) => {
-      const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
-      setFormData((prev) => ({
-        ...prev,
-        price_per_unit: value,
-        total_price: calculateTotalPrice(formData.number_of_units, value), // Update total price
-      }));
-    }}
-    className="w-full border border-black p-2"
-    type="text"
-    required
-  />
-  {errors.price_per_unit && <p className="text-red-500 text-sm mt-1">{errors.price_per_unit}</p>}
-</div>
+          <div>
+            <label className="block mb-1">Freight Price / Unit</label>
+            <input
+              name="price_per_unit"
+              value={`$${formData.price_per_unit.replace(/[^0-9]/g, '')}`} // Add leading dollar sign
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
+                setFormData((prev) => ({
+                  ...prev,
+                  price_per_unit: value,
+                  total_price: calculateTotalPrice(formData.number_of_units, value), // Update total price
+                }));
+              }}
+              className="w-full border border-black p-2"
+              type="text"
+              required
+            />
+            {errors.price_per_unit && <p className="text-red-500 text-sm mt-1">{errors.price_per_unit}</p>}
+          </div>
 
-<div>
-  <label className="block mb-1">Freight Total Price</label>
-  <input
-    name="total_price"
-    value={`$${formData.total_price}`} // Add leading dollar sign
-    className="w-full border border-black p-2"
-    type="text"
-    readOnly // Make it read-only to prevent manual editing
-  />
-  {errors.total_price && <p className="text-red-500 text-sm mt-1">{errors.total_price}</p>}
-</div>
+          <div>
+            <label className="block mb-1">Freight Total Price</label>
+            <input
+              name="total_price"
+              value={`$${formData.total_price}`} // Add leading dollar sign
+              className="w-full border border-black p-2"
+              type="text"
+              readOnly // Make it read-only to prevent manual editing
+            />
+            {errors.total_price && <p className="text-red-500 text-sm mt-1">{errors.total_price}</p>}
+          </div>
     
-            <div className="col-span-1 sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
-              <button
-                type="submit"
-                className="flex items-center gap-2 bg-blue-800 text-white px-4 py-2 rounded-md"
-              >
-                <span className="text-xl font-bold">+</span> Submit Request
-              </button>
-            </div>
-          </form>
+          <div className="col-span-1 sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+            <button
+              type="submit"
+              className="flex items-center gap-2 bg-blue-800 text-white px-4 py-2 rounded-md"
+            >
+              <span className="text-xl font-bold">+</span> Submit Request
+            </button>
+          </div>
+        </form>
     
           {successMessage && <p className="text-green-600 mt-4">{successMessage}</p>}
         </div>
@@ -479,8 +483,9 @@ export default function FreightRateForm() {
   ];
 
   return (
+    <>
+    {loading && <Loader />} {/* Show the loader when loading */}
     <div className="h-[600px] flex flex-col justify-start rounded-2xl shadow-md items-center bg-white px-4 py-10 relative">
-      {loading && <Loader />} {/* Show the loader when loading */}
       <div className="mb-10">
         <ProgressBar currentStep={step + 1} totalSteps={steps.length} />
       </div>
@@ -512,5 +517,6 @@ export default function FreightRateForm() {
         </AnimatePresence>
       </div>
     </div>
+    </>
   );
 }
