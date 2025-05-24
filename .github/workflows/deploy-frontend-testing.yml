@@ -19,8 +19,11 @@ jobs:
           echo "${{ secrets.TEST_SERVER_SSH_KEY }}" | sed 's/\\n/\n/g' > private_key.pem
           chmod 600 private_key.pem
 
-      - name: SSH connection test
+      - name: Debug SSH Key
         run: |
+          echo "=== SSH key contents ==="
+          cat private_key.pem
+          echo "========================"
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@13.58.255.54 'echo "SSH connection test passed"'
 
       - name: Deploy via SSH with key file
