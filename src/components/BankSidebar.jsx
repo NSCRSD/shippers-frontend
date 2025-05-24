@@ -1,17 +1,13 @@
-import { useState } from "react";
-import { refreshToken } from '../utils/refresh';
-
-
-
+import React, { useState } from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaBell, FaSignOutAlt} from "react-icons/fa";
 
 
-import { shipperMainLinks, ShipperAccountLinks } from "../constants/dummy";
+import { bankMainLinks, bankAccountLinks } from "../constants/dummy";
 import { images } from "../constants";
 
 
-const ShipperSidebar = () => {
+const BankSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
       const navigate = useNavigate(); // Initialize the navigate function
     
@@ -21,11 +17,6 @@ const ShipperSidebar = () => {
 
       navigate('/login');
     }
-
-    const handleToken = async () => {
-     const token = await refreshToken();
-     console.log("token value:", token)
-    };
       
     return (
       <>
@@ -70,7 +61,7 @@ const ShipperSidebar = () => {
   
           {/* Main Links */}
           <nav className="space-y-4">
-            {shipperMainLinks.map(({ name, icon: Icon, path }) => (
+            {bankMainLinks.map(({ name, icon: Icon, path }) => (
               <NavLink
                 key={name}
                 to={path}
@@ -95,7 +86,7 @@ const ShipperSidebar = () => {
           <div>
             <h3 className="text-black font-semibold mb-3">Account Setup</h3>
             <div className="space-y-4">
-              {ShipperAccountLinks.map(({ name, icon: Icon, path }) => (
+              {bankAccountLinks.map(({ name, icon: Icon, path }) => (
                 <NavLink
                   key={name}
                   to={path}
@@ -120,11 +111,6 @@ const ShipperSidebar = () => {
                 <FaSignOutAlt />
                 <span>Log out</span>
               </button>
-              <button
-              onClick={handleToken}
-              >
-                testing
-              </button>
             </div>
           </div>
   
@@ -147,4 +133,4 @@ const ShipperSidebar = () => {
     );
 }
 
-export default ShipperSidebar
+export default BankSidebar

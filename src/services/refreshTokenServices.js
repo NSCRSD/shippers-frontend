@@ -1,11 +1,14 @@
-import Api from "../api";
+import Api from '../api';
 
-export const bankAcceptShippingLineRequest = async (body) => {
+export const getNewAccessToken = async () => {
   try {
+    const refreshToken = localStorage.getItem('refresh_token'); // Retrieve the refresh token
     const response = await Api({
-      method: "post",
-      url: "/bank/accept/shipping-line-request",
-      data: body,
+      method: 'post',
+      url: '/auth/refresh', 
+      headers: {
+        Authorization: `Bearer ${refreshToken}`
+      }
     });
     return { data: response?.data, status: response?.status };
   } catch (error) {

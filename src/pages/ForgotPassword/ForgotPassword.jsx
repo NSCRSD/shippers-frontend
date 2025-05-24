@@ -4,10 +4,13 @@ import { forgotPassword } from '../../services/forgotPasswordServices';
 import { images } from "../../constants";
 import { SmartAuthLink } from "../../components";
 
+import Loader from "../../components/Loader"; // Import the Loader component
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [toast, setToast] = useState({ message: '', type: '', visible: false });
-
+  const [loading, setLoading] = useState(false); // State to manage the loader
+  
   const showToast = (message, type) => {
     setToast({ message, type, visible: true });
     setTimeout(() => setToast({ ...toast, visible: false }), 3000); // Hide toast after 3 seconds
@@ -22,21 +25,26 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await forgotPassword(email);
+      setLoading(true); // Show the loader
+      const response = await forgotPassword({email: email});
 
-      if (response.ok) {
+      if (response.status === 200) {
+        setLoading(false);
         showToast('Password reset link sent to your email.', 'success');
       } else {
+        setLoading(false);
         showToast(response?.message || 'Something went wrong.', 'error');
       }
     } catch (error) {
       console.error(error);
+      setLoading(false);
       showToast('Error connecting to server.', 'error');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center px-4">
+      {loading && <Loader />} {/* Show the loader when loading */}
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <img src={images.shippersLogo} alt="Logo" className="w-24 mx-auto mb-4" />
         <h2 className="text-2xl font-semibold text-center text-[#0E4C81] mb-2">

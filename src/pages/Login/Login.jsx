@@ -1,5 +1,5 @@
 // src/pages/Login.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -93,14 +93,18 @@ const Login = () => {
       const response = await login({ email, password });
 
       const token = response?.data?.data?.access_token;
+      const refreshToken = response?.data?.data?.refresh_token;
       const userId = response?.data?.data?.user_id;
       const userType = response?.data?.data?.user_type;
       const first_name = response?.data?.data?.first_name;
       const last_name = response?.data?.data?.last_name;
 
+      console.log("message:", response?.message)
+
       if (response.status === 200 && token) {
         // Save session info
         localStorage.setItem("token", token);
+        localStorage.setItem("refresh_token", refreshToken);
         localStorage.setItem("user_id", userId);
         localStorage.setItem("user_type", userType);
         localStorage.setItem("first_name", first_name);
@@ -113,7 +117,10 @@ const Login = () => {
             navigate("/shipper-dashboard/dashboard");
           } else if (userType === "bank") {
             setLoading(false);
-            navigate("/bank-dashboard");
+            navigate("/bank-dashboard/dashboard");
+          } else if (userType === "regulator") {
+            setLoading(false);
+            navigate("/regulator-dashboard/dashboard");
           } else {
             setLoading(false);
             navigate("/dashboard");
@@ -203,12 +210,12 @@ const Login = () => {
                   />
                   <span className="text-gray-700">Remember Me</span>
                 </label>
-                <a
-                  href="#"
+                <Link
+                  to="/forgot-password"
                   className="text-gray-500 hover:underline text-sm mt-2 lg:mt-0"
                 >
                   Forgot Password?
-                </a>
+                </Link>
               </div>
 
               <button

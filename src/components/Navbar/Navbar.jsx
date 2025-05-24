@@ -24,10 +24,15 @@ const Navbar = () => {
     const first_name = localStorage.getItem("first_name");
     const last_name = localStorage.getItem("last_name");
     const token = localStorage.getItem("token");
-
+    const user_type = localStorage.getItem("user_type");
+  
     if (token) {
       setIsLoggedIn(true);
-      setInitials(`${first_name[0]}${last_name[0]}`.toUpperCase()); // Set initials
+      if (user_type === "bank") {
+        setInitials(first_name[0].toUpperCase()); // Set only the first letter of the first name
+      } else {
+        setInitials(`${first_name[0]}${last_name[0]}`.toUpperCase()); // Set initials for other user types
+      }
     } else {
       setIsLoggedIn(false);
     }
@@ -80,7 +85,9 @@ const Navbar = () => {
     if (user_type === "shipper") {
       navigate("/shipper-dashboard/profile");
     } else if (user_type === "bank") {
-      navigate("/banker-dashboard/profile");
+      navigate("/bank-dashboard/profile");
+    } else if (user_type === "regulator") {
+      navigate("/regulator-dashboard/profile");
     } else {
       navigate("/dashboard/profile");
     }

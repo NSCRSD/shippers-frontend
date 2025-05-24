@@ -40,7 +40,7 @@ const CheckValidation = () => {
       {loading && <Loader />} {/* Show the loader when loading */}
       <h1 className="text-center text-4xl font-bold">Your Account has been Created</h1>
       <p className="text-center text-2xl text-gray-500 mb-8 tracking-widest">
-        It Awaits Departmental Validation. Check Email for Response.
+        It Awaits NSC Validation. Check Email for Response.
       </p>
 
       <Link
