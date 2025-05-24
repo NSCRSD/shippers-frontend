@@ -1,5 +1,5 @@
 // src/pages/Signup.jsx
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -17,6 +17,7 @@ const Signup = () => {
     phoneNumber: "",
     password: "",
     bankName: "",
+    agencyName: "",
     address: "",
     department: "",
     division: "",
@@ -26,6 +27,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "", visible: false });
   const [loading, setLoading] = useState(false); // State to manage the loader
+  
   const navigate = useNavigate();
 
   const showToast = (message, type) => {
@@ -47,11 +49,11 @@ const Signup = () => {
   }[strength];
 
   const validateInputs = () => {
-    if (!form.firstName && ["shipper", "terminal", "regulator", "shipping_line", "nsc", "vessel_charter"].includes(userType)) {
+    if (!form.firstName && ["shipper", "terminal", "shipping_line", "nsc", "vessel_charter"].includes(userType)) {
       showToast("Please enter your first name.", "error");
       return false;
     }
-    if (!form.lastName && ["shipper", "terminal", "regulator", "shipping_line", "nsc", "vessel_charter"].includes(userType)) {
+    if (!form.lastName && ["shipper", "terminal", "shipping_line", "nsc", "vessel_charter"].includes(userType)) {
       showToast("Please enter your last name.", "error");
       return false;
     }
@@ -88,6 +90,11 @@ const Signup = () => {
 
     if (!form.bankName && userType === "bank") {
       showToast("Please enter your bank name.", "error");
+      return false;
+    }
+
+    if (!form.agencyName && userType === "regulator") {
+      showToast("Please enter your agency name.", "error");
       return false;
     }
 
@@ -132,6 +139,7 @@ const Signup = () => {
         bank_name: form.bankName,
         department: form.department,
         division: form.division,
+        agency_name: form.agencyName,
       };
 
       setLoading(true); // Show the loader
@@ -161,16 +169,30 @@ const Signup = () => {
 
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4">
         {/* Render form fields based on userType */}
-        {userType === "bank" && (
+        {[ "regulator", "bank"].includes(userType) && (
           <>
-            <input
-              type="text"
-              placeholder="Bank Name"
-              name="bankName"
-              value={form.bankName}
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
-            />
+             {/* Render form fields based on userType */}
+              {userType === "bank" && (
+                <input
+                  type="text"
+                  placeholder="Bank Name"
+                  name="bankName"
+                  value={form.bankName}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+                />
+              )}
+
+              {userType === "regulator" && (
+                <input
+                  type="text"
+                  placeholder="Agency Name"
+                  name="agencyName"
+                  value={form.agencyName}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-400 bg-[#f4f6fd] outline-none"
+                />
+              )}
             <input
               type="email"
               placeholder="Official Email"
@@ -223,7 +245,7 @@ const Signup = () => {
           </>
         )}
 
-        {["shipper", "terminal", "regulator", "shipping_line", "nsc", "vessel_charter"].includes(userType) && (
+        {["shipper", "terminal", "shipping_line", "nsc", "vessel_charter"].includes(userType) && (
           <>
             <div className="grid grid-cols-2 gap-4">
               <input
@@ -339,17 +361,6 @@ const Signup = () => {
           SIGN UP
         </button>
       </form>
-
-      <p className="mt-8 text-xs text-gray-500 text-center max-w-xs">
-        By Creating an Account, it means you agree to our{" "}
-        <a href="#" className="underline text-gray-600">
-          Privacy Policy
-        </a>{" "}
-        and{" "}
-        <a href="#" className="underline text-gray-600">
-          Terms of Service
-        </a>
-      </p>
 
       {toast.visible && (
         <div

@@ -1,9 +1,5 @@
-import React from 'react'
-import { Bar } from 'react-chartjs-2';
-import { HiOutlineChevronRight } from 'react-icons/hi';
-
 import { DashboardHeader } from '../../components';
-import { statCards, FreightOverviewChart, barData } from "../../constants/dummy";
+import { statCards} from "../../constants/dummy";
 
 
 const MainDashboard = () => {
@@ -31,88 +27,17 @@ const MainDashboard = () => {
             );
         })}
         </div>
-        
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            <div className="lg:col-span-2">
-            <FreightOverviewChart />
-            </div>
-          <div className="bg-white p-6 rounded shadow">
-            <h3 className="text-lg font-semibold mb-4">Performance: Total Orders</h3>
-            <Bar data={barData} />
-          </div>
-        </div>
-
-        {/* Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Page Visits */}
-          <div className="bg-white p-6 rounded shadow overflow-x-auto">
-            <h3 className="text-lg font-semibold mb-4">Page Visits</h3>
-            <table className="w-full text-sm text-left">
-              <thead>
-                <tr className="text-gray-500">
-                  <th className="pb-2">Page Name</th>
-                  <th className="pb-2">Visitors</th>
-                  <th className="pb-2">Unique Users</th>
-                  <th className="pb-2">Bounce Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['/argon/', 4569, 340, '46.53%'],
-                  ['/argon/index.html', 3985, 319, '46.53%'],
-                  ['/argon/charts.html', 3513, 294, '36.49%'],
-                  ['/argon/tables.html', 2050, 147, '50.87%'],
-                  ['/argon/profile.html', 1795, 190, '46.53%'],
-                ].map(([page, visitors, users, bounce], idx) => (
-                  <tr key={idx} className="border-t">
-                    <td className="py-2">{page}</td>
-                    <td>{visitors}</td>
-                    <td>{users}</td>
-                    <td>{bounce}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Social Traffic */}
-          <div className="bg-white p-6 rounded shadow overflow-x-auto">
-            <h3 className="text-lg font-semibold mb-4">Social Traffic</h3>
-            <table className="w-full text-sm text-left">
-              <thead>
-                <tr className="text-gray-500">
-                  <th className="pb-2">Referral</th>
-                  <th className="pb-2">Visitors</th>
-                  <th className="pb-2">%</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['Facebook', 1480, 60],
-                  ['Facebook', 5480, 70],
-                  ['Google', 4807, 80],
-                  ['Instagram', 3678, 75],
-                  ['Twitter', 2645, 30],
-                ].map(([ref, visits, percent], idx) => (
-                  <tr key={idx} className="border-t">
-                    <td className="py-2">{ref}</td>
-                    <td>{visits}</td>
-                    <td>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-blue-500 h-2 rounded-full"
-                          style={{ width: `${percent}%` }}
-                        ></div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      {/* Recent Activity or Quick Actions */}
+      <section className="bg-white p-6 rounded-lg shadow-sm">
+        <h3 className="text-lg font-semibold mb-4 text-gray-800">Recent Activity</h3>
+        <ul className="space-y-3 text-sm text-gray-600">
+          <li>✅ You completed a task yesterday.</li>
+          <li>📈 Your performance increased by 12% this week.</li>
+          <li>📬 You received 3 new messages.</li>
+        </ul>
+      </section>  
+ 
     </main>
   )
 }

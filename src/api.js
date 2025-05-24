@@ -1,32 +1,53 @@
-// api.js
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; // Use the correct named export
-import { refreshAccessToken } from './utils/refresh';
+import axios from "axios";
+import { refreshToken } from "./utils/refresh";
 
-// Declare Api first
 const Api = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL,
+  timeout: 10000,
 });
 
-// Attach interceptor
-Api.interceptors.request.use(async config => {
-  let token = localStorage.getItem('token');
+Api.interceptors.request.use(
+  async (config) => {
+    const token = localStorage.getItem("token");
+    if (token && !config.headers["Authorization"]) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-  if (token) {
-    const decoded = jwtDecode(token); // Use jwtDecode correctly
-    const isExpired = decoded.exp * 1000 < Date.now();
+Api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const prevRequest = error?.config;
 
-    if (isExpired) {
-      token = await refreshAccessToken();
+    if (error.code === "ECONNABORTED" && error.message.includes("timeout")) {
+      throw new Error("Request timed out");
     }
 
-    config.headers.Authorization = `Bearer ${token}`;
+    if (
+      error?.response?.status === 401 &&
+      error?.response?.data?.msg?.includes("Token has expired") &&
+      !prevRequest?._retry
+    ) {
+      prevRequest._retry = true;
+      try {
+        const newAccessToken = await refreshToken();
+        return Api({
+          ...prevRequest,
+          headers: {
+            ...prevRequest.headers,
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+        });
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
   }
+);
 
-  return config;
-});
-
-// Export Api
 export default Api;
-
-
