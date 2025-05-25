@@ -29,7 +29,7 @@ jobs:
       - name: Deploy via SSH with key file
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 13.58.255.54
+          host: 3.147.59.154
           username: ubuntu
           key_path: private_key.pem
           script: |
