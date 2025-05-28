@@ -39,7 +39,24 @@ const ApplicationList = () => {
               <tr key={app.application_id} className="hover:bg-gray-50 transition duration-300 ease-in-out">
                 <td className="px-6 py-4">{app.title}</td>
                 <td className="px-6 py-4">{app.cci_number}</td>
-                <td className="px-6 py-4">{app.status}</td>
+                <td className="px-6 py-4">
+                  <span
+                    className={
+                      `capitalize px-3 py-1 rounded-full text-xs font-semibold
+                      ${
+                        app.status === "draft"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : app.status === "pending"
+                          ? "bg-blue-100 text-blue-800"
+                          : app.status === "rejected"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`
+                    }
+                  >
+                    {app.status}
+                  </span>
+                </td>
                 <td className="px-6 py-4">{app.shipper_name}</td>
                 <td className="px-6 py-4">{new Date(app.created_at).toLocaleDateString()}</td>
                 <td className="px-6 py-4">

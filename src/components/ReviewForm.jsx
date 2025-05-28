@@ -17,8 +17,11 @@ const ReviewForm = ({ applicationId }) => {
             reason,
         };
       const res = await reviewApplication(payload);
-      console.log("reponse", res);
-      toast.success(res.data.message);
+      if (res.data.data.review_status === "submitted_to_nsc") {
+        toast.success('Application submitted to NSC for review');
+      } else if (res.data.data.review_status === "rejected") {
+        toast.success('Application Rejected'); 
+      } 
     } catch (err) {
       toast.info('Something went wrong');
     }
