@@ -9,13 +9,13 @@ const MainRegulatorDashboard = () => {
     const [code, setCode] = useState("");
 
     const handleInputChange = (e) => {
-        setCode(e.target.value);
+      setCode(e.target.value);
     };
 
     const handleVerify = () => {
-        if (!code.trim()) return;
-        console.log("Verifying code:", code);
-        // Call API or validation logic here
+      if (!code.trim()) return;
+      console.log("Verifying code:", code);
+      // Call API or validation logic here
     };
 
   return (

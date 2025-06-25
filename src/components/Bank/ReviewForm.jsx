@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { reviewApplication } from '../services/bankFreightServices';
+import { reviewApplication } from '../../services/bankFreightServices';
 import { toast } from "sonner";
 
 const ReviewForm = ({ applicationId }) => {

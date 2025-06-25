@@ -1,9 +1,8 @@
 import { Outlet } from 'react-router-dom';
-
-import { RegulatorSidebar } from "../../components";
+import { NscSidebar } from "../../components";
 import { images } from "../../constants";
 
-const RegulatorDashboard = () => {
+const NscDashboard = () => {
     return (
     <div className="relative flex min-h-screen bg-gray-100">
         <div
@@ -13,7 +12,7 @@ const RegulatorDashboard = () => {
         }}
         ></div>
         <div className="flex w-full z-10">
-        <RegulatorSidebar />
+        <NscSidebar />
     
         {/* Main Content */}
         <Outlet />
@@ -22,4 +21,4 @@ const RegulatorDashboard = () => {
     )
 }
 
-export default RegulatorDashboard
+export default NscDashboard

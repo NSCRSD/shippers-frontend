@@ -11,7 +11,8 @@ import {
   CheckValidation, BankDashboard, MainBankDashboard, BankFreightRateRequest, 
   CharterPartyRequest, DemurrageRequest, SubmissionRequests, ConnectionRequests,
   ForgotPassword, RegulatorDashboard, MainRegulatorDashboard, RegulatorFreightRateRequest,
-  RegulatorCharterPartyRequest, RegulatorDemurrageRequest
+  RegulatorCharterPartyRequest, RegulatorDemurrageRequest, NscDashboard, MainNscDashboard, 
+  NscFreightRateRequest, NscCharterPartyRequest, NscDemurrageRequest
 } from './pages';
 import {
   Navbar, Footer, SignUpLayout, ProtectedRoute, Loader
@@ -89,7 +90,6 @@ const AppRoutes = () => {
 
             {/* Shipper Dashboard Routes */}
             <Route path="/shipper-dashboard" element={<ProtectedRoute><ShipperDashboard /></ProtectedRoute>}>
-              <Route index element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
               <Route path="dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
               <Route path="bank" element={<ProtectedRoute><Bank /></ProtectedRoute>} />
               <Route path="freight-rate-form" element={<ProtectedRoute><FreightRateForm /></ProtectedRoute>} />
@@ -101,7 +101,6 @@ const AppRoutes = () => {
 
             {/* Bank Dashboard Routes */}
             <Route path="/bank-dashboard" element={<ProtectedRoute><BankDashboard /></ProtectedRoute>}>
-              <Route index element={<ProtectedRoute><MainBankDashboard /></ProtectedRoute>} />
               <Route path="dashboard" element={<ProtectedRoute><MainBankDashboard /></ProtectedRoute>} />
               <Route path="freight-rate-request" element={<ProtectedRoute><BankFreightRateRequest /></ProtectedRoute>} />
               <Route path="charter-party-request" element={<ProtectedRoute><CharterPartyRequest /></ProtectedRoute>} />
@@ -114,11 +113,20 @@ const AppRoutes = () => {
 
             {/* Regulators Dashboard Routes */}
             <Route path="/regulator-dashboard" element={<ProtectedRoute><RegulatorDashboard /></ProtectedRoute>}>
-              <Route index element={<ProtectedRoute><MainRegulatorDashboard /></ProtectedRoute>} />
               <Route path="dashboard" element={<ProtectedRoute><MainRegulatorDashboard /></ProtectedRoute>} />
               <Route path="freight-rate-request" element={<ProtectedRoute><RegulatorFreightRateRequest /></ProtectedRoute>} />
               <Route path="charter-party-request" element={<ProtectedRoute><RegulatorCharterPartyRequest /></ProtectedRoute>} />
               <Route path="demurrage-request" element={<ProtectedRoute><RegulatorDemurrageRequest /></ProtectedRoute>} />
+              <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            </Route>
+
+            {/* Nsc Dashboard Routes */}
+            <Route path="/nsc-dashboard" element={<ProtectedRoute><NscDashboard /></ProtectedRoute>}>
+              <Route path="dashboard" element={<ProtectedRoute><MainNscDashboard /></ProtectedRoute>} />
+              <Route path="freight-rate-request" element={<ProtectedRoute><NscFreightRateRequest /></ProtectedRoute>} />
+              <Route path="charter-party-request" element={<ProtectedRoute><NscCharterPartyRequest /></ProtectedRoute>} />
+              <Route path="demurrage-request" element={<ProtectedRoute><NscDemurrageRequest /></ProtectedRoute>} />
               <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             </Route>

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaBell, FaSignOutAlt} from "react-icons/fa";
 
 
-import { regulatorMainLinks, regulatorAccountLinks } from "../constants/dummy";
-import { images } from "../constants";
+import { bankMainLinks, bankAccountLinks } from "../../constants/dummy";
+import { images } from "../../constants";
 
 
-const RegulatorSidebar = () => {
+const BankSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
       const navigate = useNavigate(); // Initialize the navigate function
     
@@ -61,7 +61,7 @@ const RegulatorSidebar = () => {
   
           {/* Main Links */}
           <nav className="space-y-4">
-            {regulatorMainLinks.map(({ name, icon: Icon, path }) => (
+            {bankMainLinks.map(({ name, icon: Icon, path }) => (
               <NavLink
                 key={name}
                 to={path}
@@ -86,7 +86,7 @@ const RegulatorSidebar = () => {
           <div>
             <h3 className="text-black font-semibold mb-3">Account Setup</h3>
             <div className="space-y-4">
-              {regulatorAccountLinks.map(({ name, icon: Icon, path }) => (
+              {bankAccountLinks.map(({ name, icon: Icon, path }) => (
                 <NavLink
                   key={name}
                   to={path}
@@ -133,4 +133,4 @@ const RegulatorSidebar = () => {
     );
 }
 
-export default RegulatorSidebar
+export default BankSidebar

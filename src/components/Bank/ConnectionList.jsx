@@ -5,8 +5,8 @@ import {
   fetchConnectedShippers,
   fetchConnectedShippingLines,
   fetchConnectedVesselChaterer
-} from  "../services/connectionRequestServices";
-import { bankAcceptShipperRequest } from "../services/bankAcceptShipperServices"
+} from  "../../services/connectionRequestServices";
+import { bankAcceptShipperRequest } from "../../services/bankAcceptShipperServices"
 
 const TABS = ["Pending Connections", "Connected Shippers", "Connected Shipping Lines", "Connected Vessel Charterer/Owner"];
 

@@ -1,4 +1,4 @@
-import { FaFileAlt, FaUser, FaTruck, FaChartBar, FaTachometerAlt, FaUniversity, FaGlobe, FaSlidersH, FaConnectdevelop } from "react-icons/fa";
+import { FaFileAlt, FaUser, FaChartBar, FaTachometerAlt, FaUniversity, FaGlobe, FaSlidersH, FaConnectdevelop } from "react-icons/fa";
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -78,13 +78,6 @@ export const departmentOptions = [
   { label: "Regulatory", value: "Regulatory" },
 ];
 
-export const statCards = [
-  { title: 'FREIGHTS REQUESTED', value: 55, change: '+3.01%', icon: <FaTruck /> },
-  { title: 'FREIGHT SHEETS CONFIRMED', value: 38, change: '+5.20%', icon: <FaFileAlt /> },
-  { title: 'FREIGHT PENDING APPROVAL', value: 12, change: '-2.82%', icon: <FaFileAlt /> },
-  { title: 'AMOUNT SAVED', value: 97, change: '+8.12%', icon: <FaChartBar /> },
-];
-
 
 export const FreightOverviewChart = () => {
   const data = {
@@ -159,6 +152,19 @@ export const regulatorMainLinks = [
 export const regulatorAccountLinks = [
   { name: 'My Profile', icon: FaUser, path: '/regulator-dashboard/profile' },
   { name: 'Settings', icon: FaSlidersH, path: '/regulator-dashboard/settings' },
+];
+
+/* Nsc Dashboard paths */
+export const nscMainLinks = [
+  { name: 'Dashboard', icon: FaTachometerAlt, path: '/nsc-dashboard/dashboard' },
+  { name: 'Freight Rate Request', icon: FaUniversity, path: '/nsc-dashboard/freight-rate-request' },
+  { name: 'Charter Party Request', icon: FaFileAlt, path: '/nsc-dashboard/charter-party-request' },
+  { name: 'Demurrage Request', icon: FaGlobe, path: '/nsc-dashboard/demurrage-request' },
+];
+
+export const nscAccountLinks = [
+  { name: 'My Profile', icon: FaUser, path: '/nsc-dashboard/profile' },
+  { name: 'Settings', icon: FaSlidersH, path: '/nsc-dashboard/settings' },
 ];
 
 export const links = [

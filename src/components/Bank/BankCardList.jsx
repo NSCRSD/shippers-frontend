@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
-import { shipperBanks } from '../services/getBankServices'; 
-import { shipperConnectBanks } from '../services/connectToBankForShipperServices'; 
+import { shipperBanks } from '../../services/getBankServices'; 
+import { shipperConnectBanks } from '../../services/connectToBankForShipperServices'; 
 
 const BankCardList = () => {
   const [bankData, setBankData] = useState([]); 

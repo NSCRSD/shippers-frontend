@@ -87,8 +87,8 @@ const Navbar = () => {
       navigate("/bank-dashboard/profile");
     } else if (user_type === "regulator") {
       navigate("/regulator-dashboard/profile");
-    } else {
-      navigate("/dashboard/profile");
+    } else if (user_type === "nsc") {
+      navigate("/nsc-dashboard/profile");
     }
   };
 
