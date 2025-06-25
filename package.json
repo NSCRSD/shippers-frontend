@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -10,6 +11,7 @@
     "axios": "^1.8.4",
     "chart.js": "^4.4.9",
     "framer-motion": "^12.7.3",
+    "heroicons": "^2.2.0",
     "icons": "^1.0.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.503.0",

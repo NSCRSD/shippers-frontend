@@ -1,5 +1,4 @@
-
-const CharterPartyRequest = () => {
+const NscCharterPartyRequest = () => {
   return (
     <div>
       Charter Party Request Coming Soon!!
@@ -7,4 +6,4 @@ const CharterPartyRequest = () => {
   )
 }
 
-export default CharterPartyRequest
+export default NscCharterPartyRequest

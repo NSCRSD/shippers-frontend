@@ -5,8 +5,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaBell, FaSignOutAlt} from "react-icons/fa";
 
 
-import { shipperMainLinks, ShipperAccountLinks } from "../constants/dummy";
-import { images } from "../constants";
+import { shipperMainLinks, ShipperAccountLinks } from "../../constants/dummy";
+import { images } from "../../constants";
 
 
 const ShipperSidebar = () => {

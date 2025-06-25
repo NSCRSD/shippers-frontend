@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getFreightApplications } from '../services/bankFreightServices';
-import { ApplicationDetailModal } from '../components';
+import { getFreightApplications } from '../../services/bankFreightServices';
+import { ApplicationDetailModal } from '..';
 
 const ITEMS_PER_PAGE = 8;
 
@@ -73,20 +73,38 @@ const ApplicationList = () => {
         </table>
       </div>
 
-      {/* Pagination Tabs */}
-      {totalPages > 1 && (
-        <div className="flex justify-center space-x-2 mt-4">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-blue-600 hover:text-white transition`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-      )}
+    {/* Enhanced Pagination */}
+    {totalPages > 1 && (
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className={`flex items-center gap-1 px-4 py-2 rounded-md text-sm font-medium transition 
+            ${currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Previous
+        </button>
+
+        <span className="text-sm text-gray-700 font-medium">
+          Page <span className="text-blue-600">{currentPage}</span> of <span className="text-blue-600">{totalPages}</span>
+        </span>
+
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className={`flex items-center gap-1 px-4 py-2 rounded-md text-sm font-medium transition 
+            ${currentPage === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+        >
+          Next
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    )}
 
       {selectedApp && (
         <ApplicationDetailModal

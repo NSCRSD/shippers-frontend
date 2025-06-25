@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../ProgressBar';
 import { toast } from 'sonner';
 
 import { ArrowLeft } from 'lucide-react'; 
-import { shipperFreighRateApplications } from '../services/freightRateAppServices';
-import { shipperFreighRateForm } from '../services/freightRateFormServices';
-import { shipperConnectedBanks } from '../services/connectedBankServices'; 
-import Loader from './Loader';
+import { shipperFreighRateApplications } from '../../services/freightRateAppServices';
+import { shipperFreighRateForm } from '../../services/freightRateFormServices';
+import { shipperConnectedBanks } from '../../services/connectedBankServices'; 
+import Loader from '../Loader';
 
 export default function FreightRateForm() {
   const [step, setStep] = useState(0);
@@ -28,6 +28,7 @@ export default function FreightRateForm() {
     price_per_unit: '',
     total_price: '',
   });
+  
   const [connectedBanks, setConnectedBanks] = useState([]); 
   const [applicationId, setApplicationId] = useState(null); 
   const [errors, setErrors] = useState({});

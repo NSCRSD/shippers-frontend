@@ -115,9 +115,9 @@ const Login = () => {
           } else if (userType === "regulator") {
             setLoading(false);
             navigate("/regulator-dashboard/dashboard");
-          } else {
+          } else if (userType === "regulator") {
             setLoading(false);
-            navigate("/dashboard");
+            navigate("/nsc-dashboard/dashboard");
           }
       } else {
         setLoading(false); // Hide the loader

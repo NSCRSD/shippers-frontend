@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getFreightDetails } from '../services/shipperFreightServices';
+import { getFreightDetails } from '../../services/bankFreightServices';
+import { ReviewForm } from '..';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ShipperApplicationDetailModal = ({ applicationId, onClose }) => {
+const ApplicationDetailModal = ({ applicationId, onClose }) => {
   const [details, setDetails] = useState(null);
 
   useEffect(() => {
@@ -44,10 +45,11 @@ const ShipperApplicationDetailModal = ({ applicationId, onClose }) => {
               <p key={key}><strong className="capitalize">{key.replace(/_/g, ' ')}:</strong> {value}</p>
             ))}
           </div>
+          <ReviewForm applicationId={application.id} />
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
 };
 
-export default ShipperApplicationDetailModal
+export default ApplicationDetailModal

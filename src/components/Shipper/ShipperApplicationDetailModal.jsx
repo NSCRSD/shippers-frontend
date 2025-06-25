@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { getFreightDetails } from '../services/bankFreightServices';
-import { ReviewForm } from '../components';
+import { getFreightDetails } from '../../services/shipperFreightServices';
+import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ApplicationDetailModal = ({ applicationId, onClose }) => {
+const ShipperApplicationDetailModal = ({ applicationId, onClose }) => {
   const [details, setDetails] = useState(null);
 
   useEffect(() => {
-    getFreightDetails({id: applicationId}).then(res => setDetails(res.data.data));
+    getFreightDetails({ id: applicationId })
+      .then(res => setDetails(res.data.data))
+      .catch(() => toast.error('Failed to load application details.'));
   }, [applicationId]);
 
   if (!details) return null;
@@ -45,11 +47,11 @@ const ApplicationDetailModal = ({ applicationId, onClose }) => {
               <p key={key}><strong className="capitalize">{key.replace(/_/g, ' ')}:</strong> {value}</p>
             ))}
           </div>
-          <ReviewForm applicationId={application.id} />
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
 };
 
-export default ApplicationDetailModal
+export default ShipperApplicationDetailModal
+
